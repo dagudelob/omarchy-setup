@@ -39,7 +39,11 @@ git push -u origin "$CURRENT_BRANCH"
 echo ""
 echo "==> 4. Actualizando catálogo de soluciones en la rama main..."
 # Buscar el archivo de documentación en la rama actual
-DOC_PATH=$(git ls-files "docs/resolutions/*.md" | tail -n 1 || true)
+SLUG="${CURRENT_BRANCH#*/}"
+DOC_PATH=$(git ls-files "docs/resolutions/*${SLUG}*.md" | head -n 1 || true)
+if [ -z "$DOC_PATH" ]; then
+    DOC_PATH=$(git ls-files "docs/resolutions/*.md" | tail -n 1 || true)
+fi
 DOC_TITLE="$CURRENT_BRANCH"
 if [ -n "$DOC_PATH" ] && [ -f "$DOC_PATH" ]; then
     DOC_TITLE=$(head -n 1 "$DOC_PATH" | sed 's/^# *//' || echo "$CURRENT_BRANCH")
