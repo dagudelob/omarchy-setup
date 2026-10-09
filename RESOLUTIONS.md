@@ -9,3 +9,4 @@ Registro organizado de problemas resueltos y configuraciones realizadas, con sus
 | 2026-10-09 | `fix` | Recuperación y estabilización de BitLocker al arrancar Windows desde Limine | [fix/bitlocker-limine-boot](https://github.com/dagudelob/omarchy-setup/tree/fix/bitlocker-limine-boot) |
 
 | 2026-10-09 | `feature` | Configuración de Zsh y Oh My Posh con tema Night Owl y Nerd Fonts | [feature/antigravity-app-launcher](https://github.com/dagudelob/omarchy-setup/tree/feature/antigravity-app-launcher) |
+| 2026-10-09 | `fix` | Configuración de Zsh y Oh My Posh con tema Night Owl y Nerd Fonts | [fix/timezone-toronto](https://github.com/dagudelob/omarchy-setup/tree/fix/timezone-toronto) |
