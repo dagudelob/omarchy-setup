@@ -25,3 +25,7 @@ credentials
 __pycache__/
 *.sqlite
 *.db
+
+# Configuración de editores
+.vscode/
+.idea/
