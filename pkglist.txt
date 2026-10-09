@@ -134,6 +134,7 @@ ripgrep
 ruby
 sddm
 slurp
+snapshot
 socat
 starship
 sudo
