@@ -1,0 +1,27 @@
+# Credenciales, secretos y tokens
+*.env
+*.env.*
+*.secret
+*.token
+*.key
+*.pem
+id_rsa*
+id_ed25519*
+*.kdbx
+credentials
+*.credential
+*.credentials
+
+# Archivos temporales y de respaldo
+*.bak
+*.bak.*
+*~
+*.swp
+*.swo
+*.log
+
+# Caches y bases de datos locales
+.cache/
+__pycache__/
+*.sqlite
+*.db
