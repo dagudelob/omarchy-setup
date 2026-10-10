@@ -10,3 +10,4 @@ Registro organizado de problemas resueltos y configuraciones realizadas, con sus
 
 | 2026-10-09 | `feature` | Integración de Antigravity en el Lanzador de Aplicaciones (Desktop Entry) | [feature/antigravity-app-launcher](https://github.com/dagudelob/omarchy-setup/tree/feature/antigravity-app-launcher) |
 | 2026-10-09 | `fix` | Configuración de Zona Horaria Toronto (America/Toronto) | [fix/timezone-toronto](https://github.com/dagudelob/omarchy-setup/tree/fix/timezone-toronto) |
+| 2026-10-10 | `fix` | Surface Touchscreen and Camera Hardware Enablement via Linux Surface Kernel | [fix/surface-touchscreen-linux-kernel](https://github.com/dagudelob/omarchy-setup/tree/fix/surface-touchscreen-linux-kernel) |
