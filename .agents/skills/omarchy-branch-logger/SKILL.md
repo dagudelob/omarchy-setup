@@ -2,95 +2,94 @@
 name: omarchy-branch-logger
 description: >-
   Create a dedicated Git branch and Markdown record on GitHub for each Omarchy issue, bug fix, or requested feature.
-  PRIMARY TRIGGER: Triggers immediately whenever the user says "este tema quedó solucionado", "tema solucionado", "quedó solucionado", "guardar solucion", "crear rama para este problema", or asks to document an issue/fix/feature into a branch.
+  PRIMARY TRIGGER: Triggers immediately whenever the user says "este tema quedó solucionado", "tema solucionado", "quedó solucionado", "issue resolved", "problem solved", "save solution", "create branch for this issue", or asks to document an issue/fix/feature into a branch.
   Summarizes the problem, root cause, and final solution in a structured, ultra-concise Markdown file, pushes the branch to GitHub (@dagudelob/omarchy-setup), and maintains a clean catalog in the main branch.
 ---
 
 # Omarchy Branch Logger Skill
 
-Organizes, documents, and pushes every troubleshooting fix or feature into its own isolated Git branch in GitHub (`@dagudelob/omarchy-setup`), keeping solutions clean, searchable, and structured with concise Markdown records.
+Organizes, documents, and pushes every troubleshooting fix or feature into its own isolated Git branch on GitHub (`@dagudelob/omarchy-setup`), keeping solutions clean, searchable, and structured with concise Markdown records.
 
-## Disparador Principal (Trigger)
-**SIEMPRE activar este skill cuando el usuario diga:**
-- `"este tema quedó solucionado"`
-- `"tema solucionado"`
-- `"quedó solucionado"`
-- `"documentar este arreglo"`
-- `"crear rama para esta solución"`
+## Primary Triggers
+**ALWAYS activate this skill when the user indicates an issue is solved or asks to document it:**
+- `"este tema quedó solucionado"` / `"tema solucionado"` / `"quedó solucionado"`
+- `"issue resolved"` / `"problem solved"` / `"this is solved"`
+- `"document this fix"` / `"guardar solucion"`
+- `"create branch for this solution"` / `"crear rama para esta solución"`
 
 ---
 
-## Repositorio
-- **Directorio local:** `/home/dagudelo/Code/omarchy-setup`
+## Repository
+- **Local directory:** `/home/dagudelo/Code/omarchy-setup`
 - **GitHub:** `https://github.com/dagudelob/omarchy-setup`
 
 ---
 
-## Procedimiento Automatizado para el Agente
+## Automated Agent Procedure
 
-En el momento exacto en que el usuario diga *"este tema quedó solucionado"*:
+The moment the user indicates a topic is solved:
 
-### Paso 1: Identificar el Tema Tratado en la Conversación
-- Identifica el problema o funcionalidad que se acaba de resolver en los turnos recientes de la conversación.
-- Determina el tipo:
-  - `fix/` para errores, bugs, incompatibilidades o reparaciones.
-  - `feature/` para nuevas configuraciones, herramientas o personalizaciones.
-- Genera un slug corto y representativo en kebab-case (ej. `fix/omarchy-update-path`, `feature/auto-backup-skill`).
+### Step 1: Identify the Topic from Conversation
+- Identify the problem or feature that was just resolved in recent conversation turns.
+- Determine the type:
+  - `fix/` for errors, bugs, incompatibilities, or system repairs.
+  - `feature/` for new configurations, tools, or customizations.
+- Generate a concise, kebab-case slug (e.g. `fix/omarchy-update-path`, `feature/auto-backup-skill`).
 
-### Paso 2: Crear y Activar la Rama
-Ejecuta el script helper para inicializar la rama:
+### Step 2: Create and Checkout Branch
+Execute the helper script to initialize the branch:
 
 ```bash
-/home/dagudelo/Code/omarchy-setup/scripts/log-solution.sh <fix|feature> <slug> "<Título descriptivo del arreglo>"
+/home/dagudelo/Code/omarchy-setup/scripts/log-solution.sh <fix|feature> <slug> "<Descriptive title of the resolution>"
 ```
 
-### Paso 3: Redactar el Resumen Ejecutivo en el Markdown
-Edita el archivo generado en `docs/resolutions/YYYY-MM-DD-<slug>.md` asegurando que sea **supremamente resumido, conciso y directo**:
+### Step 3: Write Executive Summary in Markdown
+Edit the generated file in `docs/resolutions/YYYY-MM-DD-<slug>.md` ensuring it is **concise, direct, and focused**:
 
 ```markdown
-# [Título del Arreglo / Feature]
+# [Title of the Fix / Feature]
 
-- **Fecha:** YYYY-MM-DD
-- **Rama:** `fix/<slug>` o `feature/<slug>`
-- **Tipo:** `fix` | `feature`
+- **Date:** YYYY-MM-DD
+- **Branch:** `fix/<slug>` or `feature/<slug>`
+- **Type:** `fix` | `feature`
 
 ---
 
-## 1. Inconveniente / Requerimiento
-Resumen ejecutivo de 2-3 líneas: cuál era el error o qué se necesitaba lograr.
+## 1. Issue / Requirement
+Executive summary in 2-3 lines: what the issue was or what needed to be achieved.
 
-## 2. Causa Raíz
-Explicación técnica en 1-2 líneas de la causa del problema.
+## 2. Root Cause
+Technical explanation in 1-2 lines detailing why the problem occurred.
 
-## 3. Solución Aplicada
-Comandos exactos ejecutados, ajustes en archivos y pasos definitivos aplicados.
+## 3. Applied Solution
+Exact commands executed, file changes made, and definitive steps applied.
 
-## 4. Archivos Modificados
-- Lista de rutas absolutas de archivos creados o editados.
+## 4. Modified Files
+- List of absolute paths of created or edited files.
 
-## 5. Validación
-Cómo se confirmó que la solución funciona correctamente.
+## 5. Validation
+How the fix was verified to ensure it works correctly.
 ```
 
-*(Si la solución implicó archivos de configuración en `~/.config/`, ejecuta también una sincronización de esos archivos en la rama si corresponde).*
+*(If the solution involved configuration files in `~/.config/`, ensure those files are synced in the branch if applicable).*
 
-### Paso 4: Escaneo de Seguridad y Publicación en GitHub
-Ejecuta:
+### Step 4: Security Scan and GitHub Publication
+Run:
 
 ```bash
-/home/dagudelo/Code/omarchy-setup/scripts/publish-solution.sh "docs: registrar solucion para <slug>"
+/home/dagudelo/Code/omarchy-setup/scripts/publish-solution.sh "docs: log solution for <slug>"
 ```
 
-El script automáticamente:
-1. Aplica el filtro anti-secretos (tokens `ghp_`, `gho_`, llaves privadas SSH/RSA).
-2. Hace commit en la rama de la solución.
-3. Sube la rama a GitHub: `git push -u origin <branch>`.
-4. Vuelve a `main` y actualiza la tabla maestra `RESOLUTIONS.md` con el enlace directo a la rama en GitHub.
-5. Sube la actualización de `main` a GitHub.
+The script automatically:
+1. Applies the anti-secrets filter (`ghp_`, `gho_` tokens, SSH/RSA private keys).
+2. Commits changes to the resolution branch.
+3. Pushes the branch to GitHub: `git push -u origin <branch>`.
+4. Switches back to `main` and updates the master table in `RESOLUTIONS.md` with direct link to the branch on GitHub.
+5. Pushes the updated `main` branch to GitHub.
 
-### Paso 5: Responder al Usuario
-Muestra en el chat un resumen ultracompacto:
-- Nombre de la rama creada en GitHub.
-- Breve resumen de 3 líneas de la solución registrada.
-- Enlace directo a la rama: `https://github.com/dagudelob/omarchy-setup/tree/<branch>`.
-- Enlace al catálogo general: `https://github.com/dagudelob/omarchy-setup/blob/main/RESOLUTIONS.md`.
+### Step 5: Respond to User
+Display an ultra-compact summary in chat:
+- Name of the created branch on GitHub.
+- Brief 3-line summary of the registered solution.
+- Direct branch link: `https://github.com/dagudelob/omarchy-setup/tree/<branch>`.
+- Master catalog link: `https://github.com/dagudelob/omarchy-setup/blob/main/RESOLUTIONS.md`.

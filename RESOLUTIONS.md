@@ -1,13 +1,12 @@
-# Catálogo de Inconvenientes y Soluciones (Omarchy)
+# Troubleshooting and Resolutions Catalog (Omarchy)
 
-Registro organizado de problemas resueltos y configuraciones realizadas, con sus respectivas ramas dedicadas en GitHub.
+Organized registry of resolved issues and implemented features, with their corresponding dedicated branches on GitHub.
 
-| Fecha | Tipo | Título / Inconveniente | Rama en GitHub |
+| Date | Type | Title / Issue | Branch on GitHub |
 |---|---|---|---|
-| 2026-10-09 | `fix` | Solucion Teclado Surface: CapsLock Tradicional y US Internacional (Dead Keys) | [fix/surface-keyboard-caps-us-intl](https://github.com/dagudelob/omarchy-setup/tree/fix/surface-keyboard-caps-us-intl) |
-| 2026-10-09 | `feature` | Configuración de Zsh y Oh My Posh con tema Night Owl y Nerd Fonts | [feature/zsh-oh-my-posh-night-owl](https://github.com/dagudelob/omarchy-setup/tree/feature/zsh-oh-my-posh-night-owl) |
-| 2026-10-09 | `fix` | Recuperación y estabilización de BitLocker al arrancar Windows desde Limine | [fix/bitlocker-limine-boot](https://github.com/dagudelob/omarchy-setup/tree/fix/bitlocker-limine-boot) |
-
-| 2026-10-09 | `feature` | Integración de Antigravity en el Lanzador de Aplicaciones (Desktop Entry) | [feature/antigravity-app-launcher](https://github.com/dagudelob/omarchy-setup/tree/feature/antigravity-app-launcher) |
-| 2026-10-09 | `fix` | Configuración de Zona Horaria Toronto (America/Toronto) | [fix/timezone-toronto](https://github.com/dagudelob/omarchy-setup/tree/fix/timezone-toronto) |
+| 2026-10-09 | `fix` | Surface Keyboard Fix: Traditional CapsLock and US International (Dead Keys) | [fix/surface-keyboard-caps-us-intl](https://github.com/dagudelob/omarchy-setup/tree/fix/surface-keyboard-caps-us-intl) |
+| 2026-10-09 | `feature` | Zsh and Oh My Posh Configuration with Night Owl Theme and Nerd Fonts | [feature/zsh-oh-my-posh-night-owl](https://github.com/dagudelob/omarchy-setup/tree/feature/zsh-oh-my-posh-night-owl) |
+| 2026-10-09 | `fix` | BitLocker Recovery and Stabilization when Booting Windows from Limine | [fix/bitlocker-limine-boot](https://github.com/dagudelob/omarchy-setup/tree/fix/bitlocker-limine-boot) |
+| 2026-10-09 | `feature` | Antigravity Integration in the Application Launcher (Desktop Entry) | [feature/antigravity-app-launcher](https://github.com/dagudelob/omarchy-setup/tree/feature/antigravity-app-launcher) |
+| 2026-10-09 | `fix` | Toronto Timezone Configuration (America/Toronto) | [fix/timezone-toronto](https://github.com/dagudelob/omarchy-setup/tree/fix/timezone-toronto) |
 | 2026-10-10 | `fix` | Surface Touchscreen and Camera Hardware Enablement via Linux Surface Kernel | [fix/surface-touchscreen-linux-kernel](https://github.com/dagudelob/omarchy-setup/tree/fix/surface-touchscreen-linux-kernel) |

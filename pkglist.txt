@@ -79,6 +79,8 @@ limine
 linux
 linux-firmware
 linux-firmware-marvell
+linux-surface
+linux-surface-headers
 llvm
 localsend
 lua51
@@ -139,6 +141,7 @@ socat
 starship
 sudo
 superwhisper-bin
+surface-ipts-firmware
 sushi
 system-config-printer
 tesseract
@@ -175,3 +178,4 @@ yt-dlp
 zbar
 zoxide
 zram-generator
+zsh

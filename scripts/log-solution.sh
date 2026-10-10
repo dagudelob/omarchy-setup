@@ -5,12 +5,12 @@ REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO_DIR"
 
 TYPE="${1:-fix}"          # fix | feature | chore
-SLUG="${2:-}"             # nombre-del-arreglo (kebab-case)
-TITLE="${3:-}"            # Título legible
+SLUG="${2:-}"             # fix-slug (kebab-case)
+TITLE="${3:-}"            # Human-readable title
 
 if [ -z "$SLUG" ]; then
-    echo "Uso: $0 <fix|feature> <slug-del-arreglo> \"[Título Opcional]\""
-    echo "Ejemplo: $0 fix omarchy-update-path \"Error de ruta OMARCHY_PATH en omarchy-update\""
+    echo "Usage: $0 <fix|feature> <fix-slug> \"[Optional Title]\""
+    echo "Example: $0 fix omarchy-update-path \"OMARCHY_PATH path error in omarchy-update\""
     exit 1
 fi
 
@@ -21,11 +21,11 @@ DOC_FILE="$DOC_DIR/${DATE_STR}-${SLUG}.md"
 
 mkdir -p "$DOC_DIR"
 
-echo "==> 1. Asegurando que main esté al día..."
+echo "==> 1. Ensuring main is up to date..."
 git checkout main
 git pull origin main 2>/dev/null || true
 
-echo "==> 2. Creando/Cambiando a la rama $BRANCH_NAME..."
+echo "==> 2. Creating/Switching to branch $BRANCH_NAME..."
 if git show-ref --verify --quiet "refs/heads/$BRANCH_NAME"; then
     git checkout "$BRANCH_NAME"
 else
@@ -33,33 +33,33 @@ else
 fi
 
 if [ ! -f "$DOC_FILE" ]; then
-    echo "==> 3. Creando plantilla Markdown en $DOC_FILE..."
+    echo "==> 3. Creating Markdown template in $DOC_FILE..."
     cat <<EOF > "$DOC_FILE"
 # ${TITLE:-$SLUG}
 
-- **Fecha:** $(date +'%Y-%m-%d %H:%M:%S')
-- **Rama:** \`$BRANCH_NAME\`
-- **Tipo:** \`${TYPE}\`
+- **Date:** $(date +'%Y-%m-%d %H:%M:%S')
+- **Branch:** \`$BRANCH_NAME\`
+- **Type:** \`${TYPE}\`
 
 ---
 
-## 1. Inconveniente / Requerimiento
-<!-- Resumen de 2-3 líneas del error o funcionalidad solicitada -->
+## 1. Issue / Requirement
+<!-- 2-3 line summary of the issue or requested functionality -->
 
-## 2. Causa Raíz
-<!-- Explicación breve de por qué ocurría el problema -->
+## 2. Root Cause
+<!-- Brief explanation of why the problem occurred -->
 
-## 3. Solución Aplicada
-<!-- Pasos concretos, comandos ejecutados y configuraciones modificadas -->
+## 3. Applied Solution
+<!-- Concrete steps, commands executed, and modified configurations -->
 
-## 4. Archivos Modificados
-<!-- Lista de archivos creados o editados -->
+## 4. Modified Files
+<!-- List of created or edited files -->
 
-## 5. Validación
-<!-- Cómo se comprobó que quedó solucionado -->
+## 5. Validation
+<!-- How the resolution was verified -->
 EOF
-    echo "✔ Plantilla creada: $DOC_FILE"
+    echo "✔ Template created: $DOC_FILE"
 fi
 
-echo "✔ Rama activa: $BRANCH_NAME"
-echo "Puedes editar el archivo: $DOC_FILE"
+echo "✔ Active branch: $BRANCH_NAME"
+echo "You can edit the file: $DOC_FILE"
