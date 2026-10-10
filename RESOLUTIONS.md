@@ -10,3 +10,4 @@ Organized registry of resolved issues and implemented features, with their corre
 | 2026-10-09 | `feature` | Antigravity Integration in the Application Launcher (Desktop Entry) | [feature/antigravity-app-launcher](https://github.com/dagudelob/omarchy-setup/tree/feature/antigravity-app-launcher) |
 | 2026-10-09 | `fix` | Toronto Timezone Configuration (America/Toronto) | [fix/timezone-toronto](https://github.com/dagudelob/omarchy-setup/tree/fix/timezone-toronto) |
 | 2026-10-10 | `fix` | Surface Touchscreen and Camera Hardware Enablement via Linux Surface Kernel | [fix/surface-touchscreen-linux-kernel](https://github.com/dagudelob/omarchy-setup/tree/fix/surface-touchscreen-linux-kernel) |
+| 2026-10-10 | `fix` | Enable and configure Bluetooth service on Surface Pro | [fix/surface-bluetooth-enable](https://github.com/dagudelob/omarchy-setup/tree/fix/surface-bluetooth-enable) |
