@@ -1,103 +1,103 @@
-# Guía de Redimensionamiento de Partición EFI y Gestión de BitLocker
+# EFI System Partition Resizing and BitLocker Management Guide
 
-Este documento detalla el procedimiento para desactivar BitLocker, redimensionar la partición EFI de sistema (`/dev/nvme0n1p1`) en una Microsoft Surface Pro con arranque dual (Windows 11 + Omarchy / Arch Linux), y las precauciones críticas para evitar pérdida de datos o bloqueos del arranque.
+This document details the procedure for disabling BitLocker, resizing the system EFI partition (`/dev/nvme0n1p1`) on a Microsoft Surface Pro dual-boot setup (Windows 11 + Omarchy / Arch Linux), and critical precautions to prevent data loss or boot failures.
 
 ---
 
-## 1. Contexto y Estado del Disco
+## 1. Context and Disk Layout
 
-La Microsoft Surface Pro cuenta con una unidad NVMe particionada originalmente por Windows:
-- **`nvme0n1p1`**: EFI System Partition (ESP), FAT32, **100 MB** (montada en `/efi` en Linux).
+The Microsoft Surface Pro features an NVMe drive originally partitioned by Windows:
+- **`nvme0n1p1`**: EFI System Partition (ESP), FAT32, **100 MB** (mounted at `/efi` in Linux).
 - **`nvme0n1p2`**: Microsoft Reserved Partition (MSR), **16 MB**.
-- **`nvme0n1p3`**: Partición de Windows (C:), NTFS cifrado con **BitLocker**, **~378 GB**.
-- **`nvme0n1p4`**: Partición de recuperación de Windows, NTFS, **888 MB**.
-- **`nvme0n1p5`**: Omarchy / Arch Linux (raíz `/`), ext4, **~98 GB**.
+- **`nvme0n1p3`**: Windows partition (C:), NTFS encrypted with **BitLocker**, **~378 GB**.
+- **`nvme0n1p4`**: Windows recovery partition, NTFS, **888 MB**.
+- **`nvme0n1p5`**: Omarchy / Arch Linux (root `/`), ext4, **~98 GB**.
 
-### ¿Por qué se satura la partición EFI?
-Los 100 MB de fábrica están ocupados en ~35 MB por los cargadores de Microsoft y el resto por los kernels e initramfs de Linux. Al actualizar paquetes que usan imágenes unificadas (UKI) o generar dos kernels simultáneos (`linux` y `linux-surface`), la partición agota los últimos 13 MB libres y aborta la copia de archivos.
+### Why does the EFI partition run out of space?
+The factory 100 MB is ~35 MB occupied by Microsoft bootloaders and the rest by Linux kernels and initramfs images. When updating packages using unified kernel images (UKI) or generating two concurrent kernels (`linux` and `linux-surface`), the partition exhausts its last 13 MB of free space and aborts file copies.
 
 ---
 
-## 2. Peligros y Advertencias Importantes
+## 2. Important Risks and Warnings
 
 > [!CAUTION]
-> **Riesgo de bloqueo de arranque de Windows (BitLocker TPM)**  
-> Si se mueven o modifican las particiones del disco con BitLocker activado, el chip TPM detectará un cambio en la configuración de la plataforma de arranque (PCRs) y bloqueará la unidad pidiendo la **Clave de Recuperación de BitLocker de 48 dígitos**. Si no tienes esa clave, los datos de Windows quedan irrecuperables.  
-> **Regla de oro:** Desencriptar por completo antes de tocar particiones y tener la clave a mano respaldada desde [account.microsoft.com/devices/recoverykey](https://account.microsoft.com/devices/recoverykey).
+> **Risk of Windows boot lockout (BitLocker TPM)**  
+> If disk partitions are moved or modified while BitLocker is active, the TPM chip will detect a change in boot platform configuration (PCRs) and lock the drive, prompting for the **48-digit BitLocker Recovery Key**. Without this key, Windows data becomes irrecoverable.  
+> **Golden rule:** Fully decrypt before modifying partitions and ensure the recovery key is safely backed up from [account.microsoft.com/devices/recoverykey](https://account.microsoft.com/devices/recoverykey).
 
 > [!WARNING]
-> **Mover el sector inicial de una partición grande es una operación pesada**  
-> Para que `p1` crezca a la derecha, `p2` y `p3` deben moverse físicamente hacia adelante en el disco. Mover cientos de gigabytes bloque por bloque puede tardar entre 20 y 60 minutos. **Nunca interrumpas el proceso ni permitas que la Surface se quede sin batería** (mantén el cargador conectado).
+> **Moving the starting sector of a large partition is an intensive operation**  
+> For `p1` to expand to the right, `p2` and `p3` must be physically relocated forward on disk. Moving hundreds of gigabytes block by block may take 20 to 60 minutes. **Never interrupt the process or allow the Surface battery to drain** (keep the charger connected).
 
 > [!IMPORTANT]
-> **Arranque UEFI / UUID de partición**  
-> La partición `p1` debe mantener su formato FAT32 y preferiblemente conservar su PARTUUID/UUID. Si se recrea desde cero, habrá que restaurar los archivos del respaldo y verificar `/etc/fstab` en Linux.
+> **UEFI Boot / Partition UUID**  
+> Partition `p1` must retain its FAT32 filesystem and ideally preserve its PARTUUID/UUID. If recreated from scratch, files must be restored from backup and `/etc/fstab` verified in Linux.
 
 ---
 
-## 3. Preparación y Respaldos Previos
+## 3. Preparation and Prior Backups
 
-### A. Respaldar la partición EFI actual desde Linux
-Con una memoria USB o disco externo conectado (ej. en `/run/media/dagudelo/8698-0F9E`):
+### A. Back up the current EFI partition from Linux
+With an external USB drive connected (e.g. at `/run/media/dagudelo/8698-0F9E`):
 ```bash
 sudo cp -a /efi /run/media/dagudelo/8698-0F9E/efi-backup-$(date +%F)
 ```
-Verifica que la carpeta contenga `EFI/Microsoft`, `EFI/Boot`, `EFI/limine`, etc.
+Verify that the folder contains `EFI/Microsoft`, `EFI/Boot`, `EFI/limine`, etc.
 
-### B. Respaldar la Clave de Recuperación de BitLocker
-1. En Windows, ve a **Configuración** $\rightarrow$ **Cuentas** $\rightarrow$ o busca **BitLocker**.
-2. Guarda el código numérico de 48 dígitos en tu teléfono o libreta física.
-
----
-
-## 4. Paso a Paso: Desactivar BitLocker y Reestructurar
-
-### Paso 1: Desactivar BitLocker en Windows
-1. Inicia sesión en **Windows**.
-2. Abre el Menú Inicio, busca **"Administrar BitLocker"** (o ve a *Configuración > Privacidad y seguridad > Cifrado de dispositivo*).
-3. Haz clic en **Desactivar BitLocker** (o desactivar cifrado).
-4. Espera a que el porcentaje de descifrado llegue al **100%**. Confirma que en el Explorador de Archivos la unidad `C:` ya no tenga el icono de candado.
-5. Reinicia Windows una vez para asegurarte de que cerró limpiamente (evitar estado de suspensión rápida/Fast Startup).
-   > *Tip:* Puedes hacer un apagado completo manteniendo presionada la tecla `Shift` al hacer clic en "Apagar".
+### B. Back up your BitLocker Recovery Key
+1. In Windows, go to **Settings** $\rightarrow$ **Accounts** $\rightarrow$ or search for **BitLocker**.
+2. Save the 48-digit numeric key to your phone or a physical notepad.
 
 ---
 
-### Paso 2: Redimensionar con Live USB (GParted)
-Dado que las particiones montadas no pueden ser desplazadas, utiliza un Live USB:
-1. Prepara una memoria USB con **GParted Live** (o cualquier ISO de Linux con interfaz gráfica y GParted).
-2. Arranca la Surface desde la USB (manteniendo presionado *Bajar Volumen* al encender).
-3. Abre **GParted** y selecciona en la esquina superior derecha el disco NVMe (`/dev/nvme0n1`).
-4. Sigue esta secuencia exacta:
-   1. **Achicar y desplazar Windows (`nvme0n1p3`)**:
-      - Clic derecho en `nvme0n1p3` $\rightarrow$ **Resize/Move**.
-      - En el campo **Free space preceding (MiB)**, introduce `1024` (1 GB) o arrastra el inicio de la partición hacia la derecha para dejar ~1 GB libre a la izquierda.
-   2. **Mover la partición MSR (`nvme0n1p2`)**:
-      - Clic derecho en `nvme0n1p2` $\rightarrow$ **Resize/Move**.
-      - Arrástrala a la derecha hasta quedar pegada al inicio de la partición de Windows.
-   3. **Expandir la partición EFI (`nvme0n1p1`)**:
-      - Clic derecho en `nvme0n1p1` $\rightarrow$ **Resize/Move**.
-      - Arrastra el borde derecho ocupando todo el espacio libre no asignado (quedará de ~1.1 GB en total).
-5. Haz clic en el botón verde de **Apply All Operations** (Aplicar todas las operaciones).
-6. Deja que el proceso concluya sin desconectar la alimentación.
+## 4. Step-by-Step: Disable BitLocker and Restructure
+
+### Step 1: Disable BitLocker in Windows
+1. Log into **Windows**.
+2. Open Start Menu, search for **"Manage BitLocker"** (or go to *Settings > Privacy & security > Device encryption*).
+3. Click **Turn off BitLocker** (or disable encryption).
+4. Wait until the decryption progress reaches **100%**. Verify in File Explorer that drive `C:` no longer displays a lock icon.
+5. Reboot Windows once to ensure a clean shutdown (avoiding Fast Startup hybrid state).
+   > *Tip:* You can trigger a full shutdown by holding down `Shift` while clicking "Shut down".
 
 ---
 
-### Paso 3: Primer arranque en Windows
-1. Retira la Live USB y reinicia directamente en **Windows**.
-2. Windows puede mostrar un mensaje de análisis y reparación rápida de disco (`chkdsk`), es normal tras mover sectores NTFS.
-3. Abre el Administrador de Discos en Windows para comprobar que la partición EFI ahora mide ~1 GB.
-4. *(Opcional)* Si deseas volver a cifrar Windows, vuelve a activar BitLocker desde el panel de control.
+### Step 2: Resize with Live USB (GParted)
+Since mounted partitions cannot be moved, boot into a Live USB:
+1. Prepare a USB drive with **GParted Live** (or any graphical Linux ISO containing GParted).
+2. Boot the Surface from USB (hold *Volume Down* while powering on).
+3. Open **GParted** and select the NVMe drive (`/dev/nvme0n1`) from the top-right corner.
+4. Follow this exact sequence:
+   1. **Shrink and shift Windows (`nvme0n1p3`)**:
+      - Right-click `nvme0n1p3` $\rightarrow$ **Resize/Move**.
+      - In **Free space preceding (MiB)**, enter `1024` (1 GB) or drag the left partition edge to the right to leave ~1 GB free space to its left.
+   2. **Move the MSR partition (`nvme0n1p2`)**:
+      - Right-click `nvme0n1p2` $\rightarrow$ **Resize/Move**.
+      - Drag it rightward until adjacent to the start of the Windows partition.
+   3. **Expand the EFI partition (`nvme0n1p1`)**:
+      - Right-click `nvme0n1p1` $\rightarrow$ **Resize/Move**.
+      - Drag its right edge to occupy all newly unallocated space (totaling ~1.1 GB).
+5. Click the green checkmark button **Apply All Operations**.
+6. Allow the process to complete without disconnecting AC power.
 
 ---
 
-### Paso 4: Ajustes finales en Omarchy / Arch Linux
-1. Arranca en **Omarchy** (Linux).
-2. Comprueba el nuevo tamaño con:
+### Step 3: First Boot into Windows
+1. Remove the Live USB and boot directly into **Windows**.
+2. Windows may perform a brief disk scan and repair check (`chkdsk`); this is standard after moving NTFS sectors.
+3. Open Windows Disk Management to verify the EFI partition now measures ~1 GB.
+4. *(Optional)* If you wish to re-encrypt Windows, re-enable BitLocker from Control Panel.
+
+---
+
+### Step 4: Final Adjustments in Omarchy / Arch Linux
+1. Boot into **Omarchy** (Linux).
+2. Check the new partition size:
    ```bash
    df -h /efi
    ```
-3. Ejecuta la actualización o reconstrucción de los kernels sin riesgo de espacio:
+3. Update or rebuild kernels without storage risk:
    ```bash
    sudo mkinitcpio -P
    ```
-4. Todo el espacio adicional permitirá alojar kernels Surface, kernels estándar y UKIs sin ningún conflicto futuro.
+4. The expanded space will accommodate Surface kernels, standard kernels, and UKIs without storage bottlenecks.
