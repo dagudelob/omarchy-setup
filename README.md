@@ -1,35 +1,39 @@
 # Omarchy Setup & Backup (`dagudelo`)
 
-Copia de seguridad y configuración personalizada de **Omarchy** (Hyprland, temas, atajos, shell y paquetes del sistema).
+Backup and custom configuration for **Omarchy** (Hyprland, themes, keybindings, shell, and system packages).
 
-## Contenido
+## Contents
 
-- `config/`: Configuraciones de usuario en `~/.config/`:
-  - `hypr/`: Monitores, reglas de ventanas, bindings y apariencia de Hyprland.
-  - `omarchy/`: Ajustes de barra/shell, extensiones, temas y hooks de Omarchy.
-  - `kitty/`, `foot/`, `ghostty/`, `alacritty/`: Terminales configuradas.
-  - `fastfetch/`, `btop/`, `lazygit/`, `starship.toml`: Utilidades y CLI.
-- `shell/`: Archivos `.bashrc`, `.bash_profile`, etc.
-- `pkglist.txt`: Lista de todos los paquetes oficiales de Arch instalados explícitamente.
-- `pkglist-aur.txt`: Lista de paquetes de AUR instalados.
+- `config/`: User configurations stored in `~/.config/`:
+  - `hypr/`: Monitors, window rules, keybindings, and Hyprland appearance.
+  - `omarchy/`: Status bar/shell settings, extensions, themes, and Omarchy hooks.
+  - `kitty/`, `foot/`, `ghostty/`, `alacritty/`: Configured terminal emulators.
+  - `fastfetch/`, `btop/`, `lazygit/`, `starship.toml`: CLI tools and utilities.
+- `shell/`: Shell configuration files (`.bashrc`, `.bash_profile`, `.zshrc`, etc.).
+- `pkglist.txt`: List of explicitly installed official Arch Linux packages.
+- `pkglist-aur.txt`: List of installed AUR packages.
 
-## Uso
+## Usage
 
-### 1. Hacer una copia de seguridad actualizada
+### 1. Perform an updated backup
 ```bash
 ./backup.sh
 ```
+Or backup and push directly to GitHub:
+```bash
+./backup.sh --push
+```
 
-### 2. Restaurar tu configuración en un sistema nuevo o restaurar cambios
+### 2. Restore configuration on a new system or rollback changes
 ```bash
 ./restore.sh
 ```
 
-### 3. Reinstalar paquetes en un sistema nuevo (opcional)
+### 3. Reinstall packages on a new system (optional)
 ```bash
-# Paquetes oficiales:
+# Official packages:
 sudo pacman -S --needed - < pkglist.txt
 
-# Paquetes AUR (con yay):
+# AUR packages (with yay):
 yay -S --needed - < pkglist-aur.txt
 ```
