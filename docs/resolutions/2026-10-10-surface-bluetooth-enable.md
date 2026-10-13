@@ -1,4 +1,4 @@
-# Enable and configure Bluetooth service on Surface Pro
+# Enable and Configure Bluetooth Service on Surface Pro
 
 - **Date:** 2026-10-10
 - **Branch:** `fix/surface-bluetooth-enable`
@@ -7,22 +7,22 @@
 ---
 
 ## 1. Issue / Requirement
-El adaptador Bluetooth en el Surface Pro no estaba disponible o no iniciaba automáticamente con el sistema, impidiendo conectar periféricos y dispositivos inalámbricos.
+The Bluetooth adapter on the Surface Pro was unavailable and did not start automatically with the system, preventing wireless peripherals from connecting.
 
 ## 2. Root Cause
-El servicio del demonio `bluetooth.service` de `bluez` venía deshabilitado de forma predeterminada tras la instalación del sistema en Arch Linux, dejando el controlador `hci0` inactivo.
+The `bluetooth.service` systemd daemon from `bluez` was disabled by default following system setup, leaving controller `hci0` unpowered.
 
 ## 3. Applied Solution
-1. Verificación del controlador Bluetooth con `rfkill` asegurando que no tuviera bloqueo físico o por software (`unblocked`).
-2. Activación e inicio del servicio del sistema con arranque automático:
+1. Checked Bluetooth controller state with `rfkill` ensuring no hardware or software blocks were active.
+2. Enabled and started system service with autostart:
    ```bash
    sudo systemctl enable --now bluetooth.service
    ```
-3. Validación del estado del controlador en `bluetoothctl show` confirmando estado `Powered: yes` y registro de endpoints de audio.
+3. Validated controller state with `bluetoothctl show` confirming `Powered: yes` and registered audio endpoints.
 
 ## 4. Modified Files
-- `/usr/lib/systemd/system/bluetooth.service` (habilitado e iniciado a través de systemd).
+- `/usr/lib/systemd/system/bluetooth.service` (enabled and started via systemctl).
 
 ## 5. Validation
-- Se ejecutó `systemctl status bluetooth` confirmando estado `active (running)`.
-- Se verificó con `rfkill list bluetooth` y `bluetoothctl show` comprobando el controlador `hci0` en funcionamiento y disponible para emparejamiento.
+- Executed `systemctl status bluetooth` confirming `active (running)`.
+- Verified with `rfkill list bluetooth` and `bluetoothctl show` that controller `hci0` is operational and discoverable.
