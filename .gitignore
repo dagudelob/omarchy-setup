@@ -26,6 +26,6 @@ __pycache__/
 *.sqlite
 *.db
 
-# Configuración de editores
+# Editor configuration
 .vscode/
 .idea/
