@@ -1,31 +1,31 @@
-# Integrar Antigravity en el menú de aplicaciones de Omarchy
+# Integrate Antigravity into Omarchy Application Launcher
 
-- **Fecha:** 2026-10-09
-- **Rama:** `feature/antigravity-app-launcher`
-- **Tipo:** `feature`
+- **Date:** 2026-10-09
+- **Branch:** `feature/antigravity-app-launcher`
+- **Type:** `feature`
 
 ---
 
-## 1. Inconveniente / Requerimiento
-Antigravity y Antigravity IDE no aparecían en el menú de aplicaciones de Omarchy (`Super + Space` / `Super + Alt + Space`), obligando al usuario a abrir el explorador de archivos y buscar manualmente el ejecutable para abrir la aplicación.
+## 1. Issue / Requirement
+Antigravity and Antigravity IDE were missing from the Omarchy application menu (`Super + Space` / `Super + Alt + Space`), requiring the user to navigate the file manager and manually locate the executable each time.
 
-## 2. Causa Raíz
-Los binarios fueron descargados y descomprimidos manualmente en `~/Downloads/apps/`, sin entradas `.desktop` registradas en el directorio estándar XDG (`~/.local/share/applications/`), por lo que el lanzador de Omarchy no los indexaba.
+## 2. Root Cause
+The application binaries were downloaded and unpacked directly into `~/Downloads/apps/`, without `.desktop` files registered in the standard XDG directory (`~/.local/share/applications/`). Consequently, the Omarchy launcher could not discover or index them.
 
-## 3. Solución Aplicada
-1. Se extrajeron y configuraron los iconos oficiales en `~/.local/share/icons/` (`antigravity.png` y `antigravity-ide.png`).
-2. Se crearon los archivos de escritorio XDG en `~/.local/share/applications/`:
-   - `antigravity.desktop` vinculando el ejecutable `~/Downloads/apps/Antigravity/Antigravity-x64/antigravity`.
-   - `antigravity-ide.desktop` vinculando el ejecutable `~/Downloads/apps/Antigravity IDE/antigravity-ide`.
-3. Se otorgaron permisos de ejecución a los accesos directos y se actualizaron las bases de datos del sistema mediante `update-desktop-database ~/.local/share/applications` y `omarchy menu refresh`.
+## 3. Applied Solution
+1. Extracted and configured official application icons in `~/.local/share/icons/` (`antigravity.png` and `antigravity-ide.png`).
+2. Created standard XDG desktop entry files in `~/.local/share/applications/`:
+   - `antigravity.desktop` pointing to `~/Downloads/apps/Antigravity/Antigravity-x64/antigravity`.
+   - `antigravity-ide.desktop` pointing to `~/Downloads/apps/Antigravity IDE/antigravity-ide`.
+3. Granted executable permissions to both desktop files and updated system databases via `update-desktop-database ~/.local/share/applications` and `omarchy menu refresh`.
 
-## 4. Archivos Modificados
+## 4. Modified Files
 - `/home/dagudelo/.local/share/applications/antigravity.desktop`
 - `/home/dagudelo/.local/share/applications/antigravity-ide.desktop`
 - `/home/dagudelo/.local/share/icons/antigravity.png`
 - `/home/dagudelo/.local/share/icons/antigravity-ide.png`
 
-## 5. Validación
-- Se verificó la presencia y formato de los archivos `.desktop` con permisos ejecutables.
-- Se ejecutó `update-desktop-database` y `omarchy menu refresh` con retorno exitoso (`ok`).
-- Las aplicaciones quedan indexadas y ejecutables directamente mediante `Super + Space`.
+## 5. Validation
+- Verified existence, permissions, and format of `.desktop` files.
+- Executed `update-desktop-database` and `omarchy menu refresh` with successful return (`ok`).
+- Confirmed applications are indexed and searchable via `Super + Space`.
