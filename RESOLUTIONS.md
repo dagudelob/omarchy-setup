@@ -13,4 +13,4 @@ Organized registry of resolved issues and implemented features, with their corre
 | 2026-10-10 | `fix` | Enable and configure Bluetooth service on Surface Pro | [fix/surface-bluetooth-enable](https://github.com/dagudelob/omarchy-setup/tree/fix/surface-bluetooth-enable) |
 | 2026-10-10 | `fix` | Fix Limine root cmdline and Qt 6.12 Omarchy shell invisibility | [fix/limine-root-cmdline-and-qt612-shell](https://github.com/dagudelob/omarchy-setup/tree/fix/limine-root-cmdline-and-qt612-shell) |
 | 2026-10-10 | `fix` | Fix No Space Left on Device in EFI Partition and Limine Boot Failure | [fix/efi-disk-space-limine](https://github.com/dagudelob/omarchy-setup/tree/fix/efi-disk-space-limine) |
-| 2026-10-10 | `fix` | Migración al Paquete Oficial de Omarchy y Corrección de Espacio EFI | [fix/omarchy-update-official-package](https://github.com/dagudelob/omarchy-setup/tree/fix/omarchy-update-official-package) |
+| 2026-10-10 | `fix` | Migration to Official Omarchy Package and EFI Space Fix | [fix/omarchy-update-official-package](https://github.com/dagudelob/omarchy-setup/tree/fix/omarchy-update-official-package) |

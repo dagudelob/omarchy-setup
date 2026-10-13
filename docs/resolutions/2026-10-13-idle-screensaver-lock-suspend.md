@@ -1,4 +1,4 @@
-# Configuración de salvapantallas (2min), bloqueo/apagado de pantalla (5min) y suspensión (15min)
+# Idle Configuration: Screensaver (2m), Lock/Display Off (5m), and Suspend (15m)
 
 - **Date:** 2026-10-13
 - **Branch:** `feature/idle-screensaver-lock-suspend`
@@ -7,17 +7,17 @@
 ---
 
 ## 1. Issue / Requirement
-Configurar la gestión de inactividad de Omarchy para que tras 2 minutos se active el screensaver, a los 5 minutos se bloquee la sesión apagando la pantalla, y a los 15 minutos de inactividad total el equipo entre en suspensión de forma automática.
+Configure Omarchy idle timeouts so that after 2 minutes the screensaver starts, after 5 minutes the session locks and turns off the display, and after 15 minutes of inactivity the device automatically suspends.
 
 ## 2. Root Cause
-Omarchy gestiona nativamente los tiempos de screensaver y bloqueo mediante el daemon Quickshell en `shell.json`, pero la hibernación no estaba habilitada en el sistema (swap en zRAM sin swap persistente ni hooks de arranque) y no existía un temporizador predeterminado para suspender tras inactividad prolongada.
+Omarchy manages screensaver and lock timers via Quickshell in `shell.json`, but hibernation was unavailable (zRAM swap without persistent swap or boot hooks) and no default timeout was present for automatic system sleep after prolonged inactivity.
 
 ## 3. Applied Solution
-1. Se ajustaron los parámetros de inactividad en `~/.config/omarchy/shell.json`:
-   - `idle.screensaver`: `120` (2 minutos).
-   - `idle.lock`: `300` (5 minutos, que además apaga la pantalla vía DPMS).
-2. Se implementó el script ejecutable `~/.local/bin/omarchy-idle-suspend` que monitorea el estado de bloqueo respetando el indicador *Stay Awake* y ejecuta `systemctl suspend` tras 10 minutos de pantalla bloqueada (15 minutos totales de inactividad).
-3. Se creó y habilitó el servicio systemd de usuario `omarchy-idle-suspend.service` integrado en la sesión gráfica.
+1. Adjusted idle thresholds in `~/.config/omarchy/shell.json`:
+   - `idle.screensaver`: `120` (2 minutes).
+   - `idle.lock`: `300` (5 minutes, turns off display via DPMS).
+2. Created executable monitor `~/.local/bin/omarchy-idle-suspend` that respects the *Stay Awake* state and executes `systemctl suspend` after 10 minutes of screen lock (15 minutes total inactivity).
+3. Created and enabled user systemd service `omarchy-idle-suspend.service` for graphical session integration.
 
 ## 4. Modified Files
 - `~/.config/omarchy/shell.json`
@@ -25,5 +25,5 @@ Omarchy gestiona nativamente los tiempos de screensaver y bloqueo mediante el da
 - `~/.config/systemd/user/omarchy-idle-suspend.service`
 
 ## 5. Validation
-- Verificación de recarga en tiempo real de `omarchy-shell idle status` confirmando `screensaver: 120` y `lock: 300`.
-- Verificación del estado activo y en ejecución de `omarchy-idle-suspend.service` mediante `systemctl --user status`.
+- Realtime verification via `omarchy-shell idle status` confirming `screensaver: 120` and `lock: 300`.
+- Verified active and running state of `omarchy-idle-suspend.service` via `systemctl --user status`.
