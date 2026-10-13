@@ -2,7 +2,7 @@
 name: omarchy-backup
 description: >-
   Back up all Omarchy configuration, Hyprland dotfiles, installed packages, and user settings to the omarchy-setup git repository and push to GitHub (@dagudelob/omarchy-setup).
-  Use whenever the user asks to save, back up, sync, or push their Omarchy changes, desktop setup, or dotfiles, or triggers phrases like "guardar cambios", "backup omarchy", "guardar configuracion", "subir a github", "sync omarchy".
+  Use whenever the user asks to save, back up, sync, or push their Omarchy changes, desktop setup, or dotfiles, or triggers phrases like "save changes", "backup omarchy", "save configuration", "push to github", "sync omarchy".
   Enforces automatic secret and credential scanning to prevent uploading private keys, tokens, or environment files.
 ---
 
@@ -10,44 +10,44 @@ description: >-
 
 Safely backs up all user customizations made to Omarchy, Hyprland, terminals, shells, and package lists, audits staged files for sensitive data, and automatically synchronizes everything with the user's remote GitHub repository.
 
-## Repositorio y Destino
+## Repository and Destination
 
-- **Directorio local:** `/home/dagudelo/Code/omarchy-setup`
-- **Repositorio remoto:** `https://github.com/dagudelob/omarchy-setup`
-- **Rama principal:** `main`
+- **Local directory:** `/home/dagudelo/Code/omarchy-setup`
+- **Remote repository:** `https://github.com/dagudelob/omarchy-setup`
+- **Main branch:** `main`
 
-## Workflow de Ejecución
+## Execution Workflow
 
-Cuando el usuario pida guardar cambios, realizar un backup o sincronizar con GitHub:
+Whenever the user asks to save changes, perform a backup, or sync with GitHub:
 
-### Paso 1: Ejecutar el script de respaldo automatizado
-Ejecuta el script con el flag `--push` desde el directorio de trabajo del repositorio:
+### Step 1: Run the automated backup script
+Run the script with the `--push` flag from the repository directory:
 
 ```bash
 /home/dagudelo/Code/omarchy-setup/backup.sh --push
 ```
 
-El script se encarga automáticamente de:
-1. Exportar la lista actualizada de paquetes oficiales de Arch (`pkglist.txt`) y de AUR (`pkglist-aur.txt`).
-2. Sincronizar las carpetas esenciales en `~/.config/`:
-   - `hypr/` (atajos, monitores, reglas de ventana, look & feel)
-   - `omarchy/` (shell.json, temas, extensiones, hooks)
-   - Terminales (`kitty/`, `foot/`, `ghostty/`, `alacritty/`)
-   - CLI y utilidades (`fastfetch/`, `btop/`, `lazygit/`, `starship.toml`, `tmux/`, etc.)
-3. Sincronizar archivos de shell (`~/.bashrc`, `~/.bash_profile`).
-4. Excluir automáticamente archivos temporales, logs, `.env` y llaves privadas.
-5. Ejecutar un escaneo estricto de seguridad contra patrones de tokens de GitHub (`ghp_`, `gho_`) y llaves privadas antes de commitear.
-6. Crear un commit con fecha/hora y subirlo a la rama `main` en GitHub.
+The script automatically takes care of:
+1. Exporting the updated list of official Arch Linux packages (`pkglist.txt`) and AUR packages (`pkglist-aur.txt`).
+2. Syncing essential directories in `~/.config/`:
+   - `hypr/` (keybindings, monitors, window rules, look & feel)
+   - `omarchy/` (shell.json, themes, extensions, hooks)
+   - Terminals (`kitty/`, `foot/`, `ghostty/`, `alacritty/`)
+   - CLI tools and utilities (`fastfetch/`, `btop/`, `lazygit/`, `starship.toml`, `tmux/`, etc.)
+3. Syncing shell configuration files (`~/.bashrc`, `~/.bash_profile`, `~/.zshrc`).
+4. Automatically excluding temporary files, logs, `.env` files, and private keys.
+5. Performing a strict security scan against GitHub token patterns (`ghp_`, `gho_`) and private keys before committing.
+6. Creating a timestamped commit and pushing it to the `main` branch on GitHub.
 
-### Paso 2: Verificar el estado de la sincronización
-Si el comando anterior finalizó con éxito:
-1. Revisa `git status` en `/home/dagudelo/Code/omarchy-setup` para confirmar que el árbol quedó limpio.
-2. Informa al usuario:
-   - Que los cambios fueron respaldados y verificados contra secretos.
-   - La cantidad de archivos modificados o si no había cambios pendientes.
-   - El enlace directo al repositorio: [https://github.com/dagudelob/omarchy-setup](https://github.com/dagudelob/omarchy-setup).
+### Step 2: Verify synchronization status
+When the backup script finishes:
+1. Inspect `git status` in `/home/dagudelo/Code/omarchy-setup` to confirm the working tree is clean.
+2. Inform the user:
+   - That changes were backed up and verified against secrets.
+   - The number of modified files or if there were no pending changes.
+   - Direct link to the repository: [https://github.com/dagudelob/omarchy-setup](https://github.com/dagudelob/omarchy-setup).
 
-### Reglas Críticas de Seguridad
-- **NUNCA** agregar archivos `.env`, credenciales de bases de datos, tokens de sesión o llaves de `~/.ssh/`.
-- El archivo `.gitignore` del repositorio está activo para rechazar estos patrones.
-- Si el script aborta por detección de un patrón sospechoso, muestra el archivo al usuario y pide confirmación antes de cualquier acción.
+### Critical Security Rules
+- **NEVER** commit `.env` files, database credentials, session tokens, or keys in `~/.ssh/`.
+- The repository's `.gitignore` is active to reject these patterns.
+- If the script aborts due to a detected secret pattern, show the flagged file to the user and request confirmation before taking any action.
