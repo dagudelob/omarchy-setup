@@ -7,24 +7,24 @@
 ---
 
 ## 1. Issue / Requirement
-Al cambiar el canal de Omarchy a `edge` y actualizar el sistema, el atajo de teclado `Super + Space` dejó de abrir el menú de aplicaciones y el buscador del sistema.
+After switching Omarchy channel to `edge` and upgrading the system, the `Super + Space` shortcut stopped launching the application menu and search popup.
 
 ## 2. Root Cause
-La actualización de Omarchy introdujo una nueva arquitectura de atajos globales nativos (`GlobalShortcut` en Quickshell) gestionados directamente por Hyprland. Sin embargo, en el sistema seguía activo un directorio obsoleto de compatibilidad temporal (`~/.config/omarchy/shell_override/` y scripts en `~/.local/bin/`) originado por un bug anterior de Qt 6.12, el cual no implementaba estos manejadores de `GlobalShortcut`.
+Omarchy upstream introduced a new architecture for native global shortcuts (`GlobalShortcut` in Quickshell) handled directly by Hyprland. However, an obsolete local compatibility override directory (`~/.config/omarchy/shell_override/` and wrapper scripts in `~/.local/bin/`) created during an earlier Qt 6.12 bug was still intercepting the shell without implementing the new handlers.
 
 ## 3. Applied Solution
-1. Se eliminaron los ejecutables wrapper obsoletos de `~/.local/bin/` (`omarchy-launch-shell`, `omarchy-restart-shell`, `omarchy-shell`).
-2. Se eliminó la copia heredada `~/.config/omarchy/shell_override/` para que el sistema utilice el shell oficial provisto en `/usr/share/omarchy/shell/`, que ya incluye soporte nativo y solución upstream para Qt 6.
-3. Se reinició Quickshell mediante `omarchy restart shell` y se recargó la configuración de Hyprland con `hyprctl reload`.
+1. Removed obsolete wrapper binaries from `~/.local/bin/` (`omarchy-launch-shell`, `omarchy-restart-shell`, `omarchy-shell`).
+2. Removed legacy directory `~/.config/omarchy/shell_override/`, allowing the system to use official `/usr/share/omarchy/shell/` with upstream Qt 6 fixes.
+3. Restarted Quickshell via `omarchy restart shell` and reloaded Hyprland with `hyprctl reload`.
 
 ## 4. Modified Files
-- `~/.local/bin/omarchy-launch-shell` (eliminado)
-- `~/.local/bin/omarchy-restart-shell` (eliminado)
-- `~/.local/bin/omarchy-shell` (eliminado)
-- `~/.config/omarchy/shell_override/` (árbol de anulación eliminado)
+- `~/.local/bin/omarchy-launch-shell` (deleted)
+- `~/.local/bin/omarchy-restart-shell` (deleted)
+- `~/.local/bin/omarchy-shell` (deleted)
+- `~/.config/omarchy/shell_override/` (deleted override tree)
 
 ## 5. Validation
-- Verificación del proceso activo ejecutando `/usr/share/omarchy/shell/shell.qml`.
-- Comprobación de la respuesta IPC y toggle del menú con `omarchy-menu toggle`.
-- Ejecución de `hyprctl reload` sin errores.
-- Confirmación de apertura inmediata del menú interactivo con `Super + Space`.
+- Confirmed active process running `/usr/share/omarchy/shell/shell.qml`.
+- Verified IPC response and menu toggle via `omarchy-menu toggle`.
+- Clean reload of `hyprctl reload` without errors.
+- Immediate response of application menu upon pressing `Super + Space`.
