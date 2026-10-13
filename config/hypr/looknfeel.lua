@@ -5,18 +5,14 @@
 -- o.transparent_window("my-app")
 -- o.transparent_window("my-app", "0.9 0.85") -- Custom active/inactive opacity.
 
--- https://wiki.hypr.land/Configuring/Basics/Variables/#general
--- hl.config({
---   general = {
---     -- No gaps between windows or borders.
---     gaps_in = 0,
---     gaps_out = 0,
---     border_size = 0,
---
---     -- Change to niri-like side-scrolling layout.
---     layout = "scrolling",
---   },
--- })
+hl.config({
+  general = {
+    -- Sin espacios entre ventanas ni bordes
+    gaps_in = 0,
+    gaps_out = 0,
+    border_size = 0,
+  },
+})
 
 -- https://wiki.hypr.land/Configuring/Basics/Variables/#decoration
 -- hl.config({
