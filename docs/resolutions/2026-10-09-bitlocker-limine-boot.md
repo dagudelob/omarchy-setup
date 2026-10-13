@@ -1,32 +1,32 @@
-# Recuperación y estabilización de BitLocker al arrancar Windows desde Limine
+# BitLocker Recovery and Stabilization when Booting Windows from Limine
 
-- **Fecha:** 2026-10-09
-- **Rama:** `fix/bitlocker-limine-boot`
-- **Tipo:** `fix`
+- **Date:** 2026-10-09
+- **Branch:** `fix/bitlocker-limine-boot`
+- **Type:** `fix`
 
 ---
 
-## 1. Inconveniente / Requerimiento
-Al seleccionar Windows Boot Manager desde el gestor de arranque Limine (Luminer) en un entorno de dual boot, Windows solicitaba la clave de recuperación de BitLocker de 48 dígitos antes de permitir el inicio de sesión.
+## 1. Issue / Requirement
+When selecting Windows Boot Manager from the Limine bootloader in a dual-boot setup, Windows repeatedly prompted for the 48-digit BitLocker recovery key before allowing the user to sign in.
 
-## 2. Causa Raíz
-La modificación de la cadena de arranque UEFI al introducir Limine alteró las mediciones de los registros PCR del chip TPM. Al detectar una discrepancia en la secuencia de arranque segura, BitLocker bloqueó el acceso al volumen cifrado por medidas de seguridad.
+## 2. Root Cause
+Modifying the UEFI boot chain by introducing Limine altered the TPM PCR register measurements. Detecting a variance in the platform boot sequence, BitLocker triggered its protection mechanism and locked the encrypted volume.
 
-## 3. Solución Aplicada
-1. Obtención de la clave de recuperación numérica de 48 dígitos a través de la cuenta de Microsoft vinculada (`https://account.microsoft.com/devices/recoverykey`).
-2. Desbloqueo inicial del volumen introduciendo la clave en la pantalla de recuperación de Windows.
-3. Actualización de las mediciones de los protectores TPM en Windows ejecutando PowerShell / CMD como Administrador:
-   - Suspensión temporal de los protectores:
+## 3. Applied Solution
+1. Retrieved the 48-digit BitLocker numerical recovery key via the linked Microsoft account (`https://account.microsoft.com/devices/recoverykey`).
+2. Unlocked the system drive by entering the recovery key on the Windows blue screen.
+3. Updated the TPM protector measurements in Windows by running PowerShell / CMD as Administrator:
+   - Temporarily suspended BitLocker protectors:
      ```cmd
      manage-bde -protectors -disable C:
      ```
-   - Reinicio a través de Limine y reactivación de los protectores para registrar el nuevo estado de arranque:
+   - Rebooted through Limine into Windows and re-enabled protectors to record the new boot measurements:
      ```cmd
      manage-bde -protectors -enable C:
      ```
 
-## 4. Archivos Modificados
+## 4. Modified Files
 - `docs/resolutions/2026-10-09-bitlocker-limine-boot.md`
 
-## 5. Validación
-El usuario confirmó inicio correcto de Windows sin bloqueo y funcionamiento estable desde Limine ("tema solucionado").
+## 5. Validation
+Confirmed stable Windows boot directly from Limine without any further BitLocker recovery prompts.
