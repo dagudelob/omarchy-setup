@@ -7,23 +7,23 @@
 ---
 
 ## 1. Issue / Requirement
-Al ejecutar `omarchy update` y `limine-update`, la actualización fallaba con el error `Failed to copy: ... -> /efi/...: No space left on device` y arrojaba una excepción `NullPointerException` en `limine-entry-tool`, dejando la entrada de arranque de Omarchy incompleta o rota.
+Running `omarchy update` and `limine-update` failed with the error `Failed to copy: ... -> /efi/...: No space left on device` and threw a `NullPointerException` in `limine-entry-tool`, leaving the Omarchy boot entry broken.
 
 ## 2. Root Cause
-1. La partición EFI (`nvme0n1p1`) mide solo 100 MB (96 MB formateados en FAT32).
-2. Convivían dos kernels simultáneos (`linux` genérico y `linux-surface`), más 35 MB de archivos de Windows y el microcódigo de Intel (~120 MB en total), excediendo físicamente la capacidad del disco.
-3. El paquete `omarchy-settings 4.0.4-1` forzó `ENABLE_UKI=yes`, requiriendo espacio adicional para imágenes monobloque `.efi`.
+1. The EFI System Partition (`nvme0n1p1`) is only 100 MB (96 MB FAT32 formatted).
+2. Two kernels coexisted simultaneously (`linux` and `linux-surface`), alongside 35 MB of Windows bootloader files and Intel microcode (~120 MB total), physically exceeding disk capacity.
+3. The `omarchy-settings 4.0.4-1` package forced `ENABLE_UKI=yes`, requiring additional space for monolithic `.efi` images.
 
 ## 3. Applied Solution
-1. **Respaldo de seguridad:** Se respaldó la partición `/efi` completa en almacenamiento externo (`/run/media/dagudelo/8698-0F9E/efi-backup-2026-10-10/`).
-2. **Desactivación de UKI:** Se configuró `/etc/limine-entry-tool.d/zz-local-no-uki.conf` con `ENABLE_UKI=no`.
-3. **Eliminación del kernel redundante:** Se desinstaló el paquete `linux` de Arch (`sudo pacman -Rdd linux`), conservando exclusivamente `linux-surface`.
-4. **Limpieza de archivos innecesarios en `/efi`:**
-   - Se removieron fuentes asiáticas de arranque de Windows no utilizadas (`chs`, `cht`, `jpn`, `kor`).
-   - Se removieron backups duplicados (`bootmgfw.efi.{...}`, `memtest.efi`, `limine.conf.bak`).
-   - Se removieron imágenes huérfanas en la raíz de `/efi`.
-5. **Regeneración de Limine:** Se ejecutó `sudo limine-update`, generando exitosamente el initramfs y actualizando `/efi/limine.conf` para `linux-surface`.
-6. **Documentación:** Se generó la guía [docs/redimensionar-efi-bitlocker.md](file:///home/dagudelo/Code/omarchy-setup/docs/redimensionar-efi-bitlocker.md) con los pasos para agrandar `nvme0n1p1` mediante Live USB desactivando BitLocker a futuro.
+1. **Safety backup:** Backed up the entire `/efi` partition to external storage (`/run/media/dagudelo/8698-0F9E/efi-backup-2026-10-10/`).
+2. **Disable UKI:** Configured `/etc/limine-entry-tool.d/zz-local-no-uki.conf` with `ENABLE_UKI=no`.
+3. **Remove redundant kernel:** Uninstalled generic Arch `linux` (`sudo pacman -Rdd linux`), keeping exclusively `linux-surface`.
+4. **Cleanup unused files in `/efi`:**
+   - Removed unused Asian Windows boot fonts (`chs`, `cht`, `jpn`, `kor`).
+   - Removed duplicate backups (`bootmgfw.efi.{...}`, `memtest.efi`, `limine.conf.bak`).
+   - Cleaned up orphan images from `/efi` root.
+5. **Regenerate Limine:** Executed `sudo limine-update`, generating initramfs and updating `/efi/limine.conf` for `linux-surface`.
+6. **Documentation:** Created [docs/redimensionar-efi-bitlocker.md](file:///home/dagudelo/Code/omarchy-setup/docs/redimensionar-efi-bitlocker.md) with guidelines for expanding `nvme0n1p1` using a Live USB after suspending BitLocker.
 
 ## 4. Modified Files
 - `/etc/limine-entry-tool.d/zz-local-no-uki.conf`
@@ -32,6 +32,6 @@ Al ejecutar `omarchy update` y `limine-update`, la actualización fallaba con el
 - `docs/resolutions/2026-10-10-efi-disk-space-limine.md`
 
 ## 5. Validation
-- `df -h /efi` muestra 20 MB libres (81% de uso).
-- `limine-update` finaliza con código de salida 0 sin advertencias de colisión ni fallas de copia.
-- `/efi/limine.conf` contiene la entrada funcional de `Omarchy //linux-surface` con sus checksums validados.
+- `df -h /efi` confirms 20 MB free space (81% used).
+- `limine-update` completes with exit code 0 without collisions or copy errors.
+- `/efi/limine.conf` contains valid entries for `Omarchy //linux-surface` with validated checksums.
