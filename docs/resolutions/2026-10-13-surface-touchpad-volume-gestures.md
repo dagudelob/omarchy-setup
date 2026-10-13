@@ -1,4 +1,4 @@
-# Configuración de gestos touchpad para volumen y escritorios en Surface
+# Gestos Fluidos y Proporcionales de Touchpad para Volumen y Escritorios en Surface
 
 - **Date:** 2026-10-13
 - **Branch:** `feature/surface-touchpad-volume-gestures`
@@ -7,24 +7,31 @@
 ---
 
 ## 1. Issue / Requirement
-Habilitar gestos multitáctiles en el touchpad de la Microsoft Surface Type Cover bajo Hyprland/Omarchy:
-- Cambiar de escritorios/workspaces con 4 dedos horizontalmente.
-- Subir y bajar volumen con deslizamiento de 4 dedos verticalmente (arriba/abajo) manteniendo el cuadro visual OSD de Omarchy en pantalla.
+Habilitar una experiencia de gestos multitáctiles en el touchpad de la Microsoft Surface Type Cover bajo Hyprland/Omarchy con dinámica estilo Windows Precision Touchpad / macOS:
+- Control de volumen continuo y proporcional 1:1 al desplazamiento real de 4 dedos verticalmente (subir/bajar volumen con inercia y suavidad), en lugar de saltos estáticos discretos.
+- Cambio de escritorios/workspaces con 4 dedos horizontalmente de manera nativa e instantánea.
 
 ## 2. Root Cause
-Hyprland soporta gestos nativos de touchpad mediante su API `hl.gesture` en Lua, pero por defecto únicamente venía configurado el cambio de workspace con 3 dedos. Los scripts de volumen (`omarchy-audio-output-volume`) gestionan internamente el paso de volumen en PipeWire/PulseAudio y lanzan el OSD visual de Omarchy.
+Hyprland por defecto solo maneja gestos estáticos de umbral por acción (un único trigger discreto al final del recorrido del swipe). Para lograr que el volumen aumente o disminuya en tiempo real de acuerdo a la distancia exacta recorrida por los dedos en la superficie del touchpad, se requiere procesar los eventos continuos `GESTURE_SWIPE_UPDATE` de libinput a nivel de sistema.
 
 ## 3. Applied Solution
-1. Se añadieron las reglas nativas en `~/.config/hypr/input.lua`:
-   - `hl.gesture({ fingers = 4, direction = "horizontal", action = "workspace" })` para cambio de escritorios.
-   - `hl.gesture({ fingers = 4, direction = "up", action = function() hl.exec_cmd("omarchy-audio-output-volume raise") end })` para subir volumen con OSD.
-   - `hl.gesture({ fingers = 4, direction = "down", action = function() hl.exec_cmd("omarchy-audio-output-volume lower") end })` para bajar volumen con OSD.
-2. Se mantuvo la compatibilidad con el gesto de 3 dedos para workspaces.
-3. Se recargó la configuración de Hyprland con `hyprctl reload` sin errores.
+1. **Permisos y herramientas de entrada:**
+   - Adición del usuario al grupo `input` del sistema para acceso a lectura de eventos del touchpad.
+   - Instalación de `libinput-tools` mediante `omarchy pkg add`.
+2. **Daemon continuo de gestos multitáctiles:**
+   - Creación de `~/.config/omarchy/scripts/surface-touchpad-gestures.py` que lee el flujo de `libinput debug-events` en tiempo real.
+   - Traduce los deltas continuos de desplazamiento (`dy`) directamente en porcentaje de volumen proporcional con inercia física suave.
+3. **Servicio persistente:**
+   - Configuración y habilitación del servicio de usuario systemd `~/.config/systemd/user/surface-touchpad-gestures.service`.
+4. **Integración con Hyprland:**
+   - En `~/.config/hypr/input.lua` se mantiene la navegación horizontal nativa de workspaces para 3 y 4 dedos (`hl.gesture({ fingers = 4, direction = "horizontal", action = "workspace" })`), dejando la dimensión vertical liberada para el controlador de volumen continuo.
 
 ## 4. Modified Files
 - `/home/dagudelo/.config/hypr/input.lua`
+- `/home/dagudelo/.config/omarchy/scripts/surface-touchpad-gestures.py`
+- `/home/dagudelo/.config/systemd/user/surface-touchpad-gestures.service`
 
 ## 5. Validation
-- Verificación de sintaxis con `hyprctl configerrors` reportando `ok`.
-- Prueba en vivo del touchpad ejecutando `omarchy-audio-output-volume raise` y `lower`, verificando la visualización correcta de la caja flotante OSD (`omarchy-osd`) con porcentaje y barra animada.
+- Verificación del estado del servicio `surface-touchpad-gestures.service` activo y ejecutándose en segundo plano (`active (running)`).
+- Validación de sintaxis de Hyprland con `hyprctl reload` reportando `ok`.
+- Prueba física confirmada por el usuario: el volumen responde de manera proporcional, fluida y precisa al movimiento vertical de 4 dedos en el teclado de la Surface.
