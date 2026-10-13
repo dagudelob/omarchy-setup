@@ -1,36 +1,36 @@
-# Solucion Teclado Surface: CapsLock Tradicional y US Internacional (Dead Keys)
+# Surface Keyboard Fix: Traditional CapsLock and US International (Dead Keys)
 
-- **Fecha:** 2026-10-09
-- **Rama:** `fix/surface-keyboard-caps-us-intl`
-- **Tipo:** `fix`
+- **Date:** 2026-10-09
+- **Branch:** `fix/surface-keyboard-caps-us-intl`
+- **Type:** `fix`
 
 ---
 
-## 1. Inconveniente / Requerimiento
-1. Al presionar `Caps Lock`, salía un punto con tilde (`í`) o menú compose en lugar de activar el bloqueo de mayúsculas estándar.
-2. Imposibilidad de generar la letra `ñ` combinando `~` + `n`, y acentos mediante `'` + vocal (comportamiento idéntico a Windows en teclados US-Internacional).
+## 1. Issue / Requirement
+1. Pressing `Caps Lock` produced accented characters or opened the compose menu instead of acting as standard uppercase toggle.
+2. Unable to generate `ñ` with `~` + `n`, or accented vowels via `'` + vowel (matching Windows US-International behavior).
 
-## 2. Causa Raíz
-- Omarchy incluye por defecto en Hyprland la opción `compose:caps`, que reasigna la tecla CapsLock como tecla *Compose* para secuencias y emojis.
-- La distribución predeterminada era `us` estándar (sin teclas muertas / *dead keys*), y la variante `altgr-intl` enviaba la tilde `~` como tercer nivel a AltGr mientras producía ordinales (`ª`) al presionar la tecla directa.
+## 2. Root Cause
+- Omarchy defaults to `compose:caps` in Hyprland, remapping CapsLock as a Compose key.
+- The default layout was basic `us` (without dead keys), and the `altgr-intl` variant placed `~` on AltGr while producing ordinal symbols on direct press.
 
-## 3. Solución Aplicada
-1. En `~/.config/hypr/input.lua`, se configuró:
+## 3. Applied Solution
+1. In `~/.config/hypr/input.lua`, configured:
    - `kb_layout = "us"`
    - `kb_variant = "intl"` (English US International with dead keys)
-   - `kb_options = ""` (se retiró `compose:caps` para restaurar CapsLock clásico).
-2. En `~/.config/hypr/bindings.lua`, se añadió el atajo de cambio rápido:
-   - `Super + Alt + K` para cambiar de distribución (`hyprctl switchxkblayout all next`).
-3. Se recargó la configuración en caliente con `hyprctl reload`.
+   - `kb_options = ""` (removed `compose:caps` to restore standard CapsLock).
+2. In `~/.config/hypr/bindings.lua`, added quick layout toggle binding:
+   - `Super + Alt + K` to cycle keyboard layouts (`hyprctl switchxkblayout all next`).
+3. Reloaded configuration with `hyprctl reload`.
 
-## 4. Archivos Modificados
+## 4. Modified Files
 - `~/.config/hypr/input.lua`
 - `~/.config/hypr/bindings.lua`
-- `dotfiles/hypr/input.lua` (respaldado en repositorio)
-- `dotfiles/hypr/bindings.lua` (respaldado en repositorio)
+- `dotfiles/hypr/input.lua`
+- `dotfiles/hypr/bindings.lua`
 
-## 5. Validación
-- `hyprctl devices` confirmó la regla activa: `l "us", v "intl"`.
-- `CapsLock` activa y desactiva mayúsculas correctamente.
-- Secuencias `Shift + ~` luego `n` generan `ñ` y `Ñ`.
-- Secuencia `'` luego `a`, `e`, `i`, `o`, `u` genera las vocales con tilde (`á`, `é`, `í`, `ó`, `ú`).
+## 5. Validation
+- `hyprctl devices` confirmed active rules: `l "us", v "intl"`.
+- `CapsLock` toggles uppercase properly.
+- `Shift + ~` followed by `n` yields `ñ` / `Ñ`.
+- `'` followed by vowels yields accented letters (`á`, `é`, `í`, `ó`, `ú`).
