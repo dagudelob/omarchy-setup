@@ -7,32 +7,32 @@
 ---
 
 ## 1. Issue / Requirement
-1. Tras reiniciar el sistema, Limine detenía el arranque obligando a ingresar manualmente `root=/dev/nvme0n1p5 rw` con `Ctrl+X`.
-2. La barra superior (`omarchy-bar`) era invisible y al presionar `Super + Space` la pantalla se ponía en blanco sin mostrar el menú de aplicaciones.
-3. Se generó un error de sintaxis en `~/.config/hypr/autostart.lua` reportando `attempt to call a nil value (field 'spawn')`.
+1. After rebooting, Limine halted boot requiring manual entry of `root=/dev/nvme0n1p5 rw` via `Ctrl+X`.
+2. The top bar (`omarchy-bar`) was invisible, and pressing `Super + Space` produced a blank screen without showing the application menu.
+3. Syntax error in `~/.config/hypr/autostart.lua` reporting `attempt to call a nil value (field 'spawn')`.
 
 ## 2. Root Cause
-1. `/efi/limine.conf` no tenía definido el parámetro `root=...` para el kernel `linux-surface`, ya que `/etc/limine-entry-tool.d/omarchy-defaults.conf` solo usaba `+=` con banderas secundarias.
-2. La actualización a `qt6-declarative 6.12.0` introdujo un singleton interno nativo en QtQuick llamado `Color` (`QQuickColor`), el cual colisionaba con el singleton `Color.qml` de Omarchy, causando que todas las llamadas de estilo (`Color.bar.*`, `Color.menu.*`) devolvieran `undefined`.
-3. En Hyprland con backend Lua, la función de autostart es `hl.exec_cmd(...)` y no `o.spawn(...)`.
+1. `/efi/limine.conf` lacked the `root=...` parameter for `linux-surface`, as `/etc/limine-entry-tool.d/omarchy-defaults.conf` only used `+=` with secondary flags.
+2. The update to `qt6-declarative 6.12.0` introduced a native internal singleton in QtQuick named `Color` (`QQuickColor`), conflicting with Omarchy's `Color.qml` singleton and causing style properties (`Color.bar.*`, `Color.menu.*`) to return `undefined`.
+3. In Hyprland with Lua configuration backend, the autostart dispatch function is `hl.exec_cmd(...)` rather than `o.spawn(...)`.
 
 ## 3. Applied Solution
-1. **Limine:** Configurado `/etc/limine-entry-tool.d/00-root.conf` con `KERNEL_CMDLINE[default]="root=PARTUUID=087e8082-4f40-49be-bfc8-195af01c64f7 rw rootfstype=ext4"` y actualizado con `limine-update`.
-2. **Omarchy Shell / Qt 6.12:** Se creó una copia corregida en `~/.config/omarchy/shell_override/` renombrando el singleton a `OmaColor`, se ajustaron los componentes del shell y se envolvieron los ejecutables `omarchy-launch-shell`, `omarchy-restart-shell` y `omarchy-shell` en `~/.local/bin/`.
-3. **Hyprland:** Se corrigió `~/.config/hypr/autostart.lua` y se priorizó `~/.local/bin` en el `PATH` dentro de `~/.config/hypr/hyprland.lua`.
+1. **Limine:** Configured `/etc/limine-entry-tool.d/00-root.conf` with `KERNEL_CMDLINE[default]="root=PARTUUID=087e8082-4f40-49be-bfc8-195af01c64f7 rw rootfstype=ext4"` and rebuilt with `limine-update`.
+2. **Omarchy Shell / Qt 6.12:** Created an override tree in `~/.config/omarchy/shell_override/` renaming the singleton to `OmaColor`, adjusted shell components, and wrapped shell launchers in `~/.local/bin/`.
+3. **Hyprland:** Fixed `~/.config/hypr/autostart.lua` and prepended `~/.local/bin` to `PATH` in `~/.config/hypr/hyprland.lua`.
 
 ## 4. Modified Files
 - `/etc/limine-entry-tool.d/00-root.conf`
 - `/efi/limine.conf`
 - `~/.config/hypr/autostart.lua`
 - `~/.config/hypr/hyprland.lua`
-- `~/.config/omarchy/shell_override/` (árbol de shell con `OmaColor`)
+- `~/.config/omarchy/shell_override/`
 - `~/.local/bin/omarchy-launch-shell`
 - `~/.local/bin/omarchy-restart-shell`
 - `~/.local/bin/omarchy-shell`
 
 ## 5. Validation
-- Verificación con `hyprctl configerrors` (sin errores).
-- Capturas de pantalla confirmando barra superior visible y operativa con iconos de reloj, estado, bandeja y workspaces.
-- Apertura correcta del menú interactivo con `Super + Space` (`omarchy-menu toggle`).
-- Configuración persistente de arranque generada por `limine-update`.
+- Checked with `hyprctl configerrors` (clean, 0 errors).
+- Top bar verified visible and functional with system tray, clock, and workspace indicators.
+- Menu opens smoothly via `Super + Space` (`omarchy-menu toggle`).
+- Persistent kernel commandline generated successfully by `limine-update`.
