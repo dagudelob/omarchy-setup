@@ -15,8 +15,8 @@ hl.config({
       -- Use natural (inverse) scrolling.
       natural_scroll = true,
 
-      -- Use two-finger clicks for right-click instead of lower-right corner.
-      clickfinger_behavior = true,
+      -- Allow clicking in the lower-right corner for right-click (software buttons).
+      clickfinger_behavior = false,
 
       -- Tap to click
       tap_to_click = true,
@@ -25,7 +25,7 @@ hl.config({
       scroll_factor = 0.4,
 
       -- Enable the touchpad while typing.
-      disable_while_typing = false,
+      disable_while_typing = true,
 
       -- Left-click-and-drag with three fingers.
       drag_3fg = 1,
@@ -36,7 +36,11 @@ hl.config({
 -- Enable touchpad gestures for changing workspaces.
 -- See https://wiki.hypr.land/Configuring/Advanced-and-Cool/Gestures/
 hl.gesture({ fingers = 3, direction = "horizontal", action = "workspace" })
+hl.gesture({ fingers = 4, direction = "horizontal", action = "workspace" })
+
 
 -- Enable touchpad gestures for moving focus (helpful on scrolling layout).
 -- hl.gesture({ fingers = 3, direction = "left", action = function() hl.dispatch(hl.dsp.focus({ direction = "l" })) end })
 -- hl.gesture({ fingers = 3, direction = "right", action = function() hl.dispatch(hl.dsp.focus({ direction = "r" })) end })
+
+
