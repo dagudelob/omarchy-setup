@@ -23,3 +23,4 @@ Organized registry of resolved issues and implemented features, with their corre
 | 2026-10-13 | `fix` | Switch from Edge to Stable Channel and Resolve Linux Firmware Conflict | [fix/switch-stable-channel-firmware-conflict](https://github.com/dagudelob/omarchy-setup/tree/fix/switch-stable-channel-firmware-conflict) |
 | 2026-10-13 | `feature` | Eliminar espacios entre ventanas y bordes en Hyprland | [feature/remove-window-gaps-and-borders](https://github.com/dagudelob/omarchy-setup/tree/feature/remove-window-gaps-and-borders) |
 | 2026-10-13 | `feature` | Ajuste de espacios y bordes en ventanas Hyprland | [feature/window-gaps-and-borders](https://github.com/dagudelob/omarchy-setup/tree/feature/window-gaps-and-borders) |
+| 2026-10-14 | `fix` | Verificación y origen de gemini CLI en mise | [fix/verify-gemini-cli](https://github.com/dagudelob/omarchy-setup/tree/fix/verify-gemini-cli) |
