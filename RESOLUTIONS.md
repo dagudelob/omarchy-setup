@@ -24,3 +24,4 @@ Organized registry of resolved issues and implemented features, with their corre
 | 2026-10-13 | `feature` | Eliminar espacios entre ventanas y bordes en Hyprland | [feature/remove-window-gaps-and-borders](https://github.com/dagudelob/omarchy-setup/tree/feature/remove-window-gaps-and-borders) |
 | 2026-10-13 | `feature` | Ajuste de espacios y bordes en ventanas Hyprland | [feature/window-gaps-and-borders](https://github.com/dagudelob/omarchy-setup/tree/feature/window-gaps-and-borders) |
 | 2026-10-14 | `fix` | Verificación y origen de gemini CLI en mise | [fix/verify-gemini-cli](https://github.com/dagudelob/omarchy-setup/tree/fix/verify-gemini-cli) |
+| 2026-10-14 | `fix` | Fix Touchpad Right-Click Corner Recognition in Hyprland | [fix/touchpad-right-click](https://github.com/dagudelob/omarchy-setup/tree/fix/touchpad-right-click) |
