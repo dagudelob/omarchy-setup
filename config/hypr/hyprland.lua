@@ -25,5 +25,9 @@ require("hypr.autostart")
 -- Toggle config flags dynamically.
 require("default.hypr.toggles")
 
+-- Prioritize ~/.local/bin for custom user wrappers and overrides
+local home = os.getenv("HOME")
+hl.env("PATH", home .. "/.local/bin:" .. (os.getenv("PATH") or "/usr/share/omarchy/bin:/usr/bin"))
+
 -- Add any other personal Hyprland configuration below.
 -- o.window("qemu", { workspace = "5" })

@@ -1,0 +1,11 @@
+anydesk-bin
+gemini-desktop-git
+gliff
+iptsd
+libinput-gestures-git
+linux-surface
+linux-surface-headers
+ministream
+omarchy-hyprland-titlebars
+signed
+surface-ipts-firmware

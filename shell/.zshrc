@@ -19,3 +19,5 @@ alias ll='ls -lah --color=auto'
 if command -v oh-my-posh >/dev/null 2>&1; then
     eval "$(oh-my-posh init zsh --config "$HOME/.cache/oh-my-posh/themes/night-owl.omp.json")"
 fi
+
+. "$HOME/.local/share/../bin/env"
