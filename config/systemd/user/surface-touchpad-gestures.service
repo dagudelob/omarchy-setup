@@ -1,0 +1,14 @@
+[Unit]
+Description=Surface Touchpad Continuous Volume Gestures
+After=graphical-session.target
+
+[Service]
+Type=simple
+Environment=OMARCHY_PATH=/usr/share/omarchy
+Environment=PATH=%h/.local/bin:/usr/share/omarchy/bin:/usr/local/bin:/usr/bin
+ExecStart=/usr/bin/python3 %h/.config/omarchy/scripts/surface-touchpad-gestures.py
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=graphical-session.target default.target
