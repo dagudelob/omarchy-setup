@@ -26,3 +26,4 @@ Organized registry of resolved issues and implemented features, with their corre
 | 2026-10-14 | `fix` | Verificación y origen de gemini CLI en mise | [fix/verify-gemini-cli](https://github.com/dagudelob/omarchy-setup/tree/fix/verify-gemini-cli) |
 | 2026-10-14 | `fix` | Fix Touchpad Right-Click Corner Recognition in Hyprland | [fix/touchpad-right-click](https://github.com/dagudelob/omarchy-setup/tree/fix/touchpad-right-click) |
 | 2026-10-15 | `fix` | Fix Surface Pro IPU3 Cameras (DW9719 VCM and OV8865 Mode Stalling) | [fix/surface-camera-ipu3-dw9719-ov8865](https://github.com/dagudelob/omarchy-setup/tree/fix/surface-camera-ipu3-dw9719-ov8865) |
+| 2026-10-15 | `fix` | Fix Volume OSD Window for Surface Touchpad 4-Finger Gestures | [fix/surface-touchpad-volume-osd](https://github.com/dagudelob/omarchy-setup/tree/fix/surface-touchpad-volume-osd) |
