@@ -5,9 +5,9 @@
 -- See https://wiki.hypr.land/Configuring/Basics/Variables/#input
 hl.config({
   input = {
-    -- Distribución US Internacional estándar (con dead keys: ~ + n = ñ, ' + a = á)
+    -- Distribución US Internacional personalizada (comillas dobles vivas, tildes y eñes muertas)
     kb_layout = "us",
-    kb_variant = "intl",
+    kb_variant = "intl-livequote",
     -- kb_options sin compose:caps para mantener Caps Lock estándar
     kb_options = "",
 

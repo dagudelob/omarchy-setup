@@ -1,0 +1,7 @@
+default partial alphanumeric_keys
+xkb_symbols "intl-livequote" {
+    include "us(intl)"
+    name[Group1]= "English (US, intl., live quotes)";
+
+    key <AC11> { [ dead_acute, quotedbl, apostrophe, dead_diaeresis ] };
+};
