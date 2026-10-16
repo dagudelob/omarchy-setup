@@ -29,3 +29,4 @@ Organized registry of resolved issues and implemented features, with their corre
 | 2026-10-15 | `fix` | Fix Volume OSD Window for Surface Touchpad 4-Finger Gestures | [fix/surface-touchpad-volume-osd](https://github.com/dagudelob/omarchy-setup/tree/fix/surface-touchpad-volume-osd) |
 | 2026-10-16 | `feature` | Teclas muertas con comillas dobles vivas en teclado US Intl | [feature/live-double-quotes-keyboard](https://github.com/dagudelob/omarchy-setup/tree/feature/live-double-quotes-keyboard) |
 | 2026-10-16 | `feature` | Ajuste de tamaño y escala de Omarchy Bar Shell | [feature/omarchy-bar-size](https://github.com/dagudelob/omarchy-setup/tree/feature/omarchy-bar-size) |
+| 2026-10-16 | `feature` | Remap code command in terminal to Antigravity IDE | [feature/remap-code-to-antigravity](https://github.com/dagudelob/omarchy-setup/tree/feature/remap-code-to-antigravity) |
