@@ -33,3 +33,4 @@ Organized registry of resolved issues and implemented features, with their corre
 | 2026-10-16 | `fix` | GNOME Keyring SDDM PAM and login sync | [fix/gnome-keyring-sddm-sync](https://github.com/dagudelob/omarchy-setup/tree/fix/gnome-keyring-sddm-sync) |
 | 2026-10-16 | `feature` | Habilitar Alt + F4 para cerrar ventanas en Hyprland | [feature/alt-f4-close-window](https://github.com/dagudelob/omarchy-setup/tree/feature/alt-f4-close-window) |
 | 2026-10-16 | `fix` | Surface Touchpad Hardware Typing Delay via EVIOCGRAB | [fix/surface-touchpad-typing-delay](https://github.com/dagudelob/omarchy-setup/tree/fix/surface-touchpad-typing-delay) |
+| 2026-10-16 | `feature` | Remap Super + E to open Files (Nautilus) | [feature/remap-super-e-files](https://github.com/dagudelob/omarchy-setup/tree/feature/remap-super-e-files) |
