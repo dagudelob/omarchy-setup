@@ -1,0 +1,12 @@
+[Unit]
+Description=Surface Touchpad Typing Delay Daemon (1s delay)
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 %h/.config/omarchy/scripts/touchpad-typing-delay.py
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=graphical-session.target default.target
