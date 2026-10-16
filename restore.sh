@@ -34,6 +34,19 @@ if [ -d "$SHELL_DIR" ]; then
     [ -f "$SHELL_DIR/.zshrc" ] && cp "$SHELL_DIR/.zshrc" "$HOME/.zshrc" && echo "   -> ~/.zshrc"
 fi
 
+# 2.1 Restore user bin scripts
+if [ -d "$REPO_DIR/bin" ]; then
+    echo "==> 2.1 Restoring bin scripts to ~/.local/bin..."
+    mkdir -p "$HOME/.local/bin"
+    for b in "$REPO_DIR/bin"/*; do
+        if [ -f "$b" ]; then
+            cp "$b" "$HOME/.local/bin/"
+            chmod +x "$HOME/.local/bin/$(basename "$b")"
+            echo "   -> Restored ~/.local/bin/$(basename "$b")"
+        fi
+    done
+fi
+
 # 3. Reload environment
 echo "==> 3. Reloading services and desktop environment..."
 if command -v omarchy >/dev/null 2>&1; then

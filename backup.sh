@@ -65,6 +65,11 @@ echo "==> 3. Backing up shell configuration..."
 [ -f "$HOME/.bash_profile" ] && cp "$HOME/.bash_profile" "$SHELL_DIR/.bash_profile"
 [ -f "$HOME/.zshrc" ] && cp "$HOME/.zshrc" "$SHELL_DIR/.zshrc"
 
+echo "==> 3.1 Backing up user bin scripts..."
+mkdir -p "$REPO_DIR/bin"
+[ -f "$HOME/.local/bin/omarchy-default-agent" ] && cp "$HOME/.local/bin/omarchy-default-agent" "$REPO_DIR/bin/"
+[ -f "$HOME/.local/bin/omarchy-agent" ] && cp "$HOME/.local/bin/omarchy-agent" "$REPO_DIR/bin/"
+
 echo "==> 4. Security verification (secret scanning)..."
 cd "$REPO_DIR"
 
