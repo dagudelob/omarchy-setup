@@ -1,6 +1,5 @@
 anydesk-bin
 gemini-desktop-git
-gliff
 iptsd
 libinput-gestures-git
 linux-surface
