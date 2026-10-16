@@ -18,6 +18,9 @@
 -- Cambiar distribución de teclado (alternativa rápida con tecla Super)
 o.bind("SUPER + ALT + K", "Switch keyboard layout", "hyprctl switchxkblayout all next")
 
+-- Cerrar ventana con Alt + F4
+o.bind("ALT + F4", "Close window", hl.dsp.window.close())
+
 -- Change an existing binding. o.rebind takes the same arguments as o.bind.
 -- This example replaces the default file manager with Flea.
 -- o.rebind("SUPER + SHIFT + F", "File manager", { launch = "flea" })
