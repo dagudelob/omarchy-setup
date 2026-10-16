@@ -35,3 +35,4 @@ Organized registry of resolved issues and implemented features, with their corre
 | 2026-10-16 | `fix` | Surface Touchpad Hardware Typing Delay via EVIOCGRAB | [fix/surface-touchpad-typing-delay](https://github.com/dagudelob/omarchy-setup/tree/fix/surface-touchpad-typing-delay) |
 | 2026-10-16 | `feature` | Remap Super + E to open Files (Nautilus) | [feature/remap-super-e-files](https://github.com/dagudelob/omarchy-setup/tree/feature/remap-super-e-files) |
 | 2026-10-16 | `feature` | Set Antigravity IDE as default system text editor | [feature/antigravity-ide-default-editor](https://github.com/dagudelob/omarchy-setup/tree/feature/antigravity-ide-default-editor) |
+| 2026-10-16 | `feature` | Add AGY as Default Coding Agent in Omarchy | [feature/update-default-agent-to-agy](https://github.com/dagudelob/omarchy-setup/tree/feature/update-default-agent-to-agy) |
