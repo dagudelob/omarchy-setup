@@ -37,3 +37,4 @@ Organized registry of resolved issues and implemented features, with their corre
 | 2026-10-16 | `feature` | Set Antigravity IDE as default system text editor | [feature/antigravity-ide-default-editor](https://github.com/dagudelob/omarchy-setup/tree/feature/antigravity-ide-default-editor) |
 | 2026-10-16 | `feature` | Add AGY as Default Coding Agent in Omarchy | [feature/update-default-agent-to-agy](https://github.com/dagudelob/omarchy-setup/tree/feature/update-default-agent-to-agy) |
 | 2026-10-18 | `fix` | Fix dead acute producing accented consonants instead of English contractions | [fix/dead-acute-english-contractions](https://github.com/dagudelob/omarchy-setup/tree/fix/dead-acute-english-contractions) |
+| 2026-10-18 | `feature` | Touchpad gestures: 3-finger middle click and 4-finger media play/pause | [feature/touchpad-gestures-3fg-middle-4fg-media-pause](https://github.com/dagudelob/omarchy-setup/tree/feature/touchpad-gestures-3fg-middle-4fg-media-pause) |
