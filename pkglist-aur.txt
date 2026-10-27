@@ -1,6 +1,7 @@
 anydesk-bin
+electron33-bin
+electron33-bin-debug
 gemini-desktop-git
-gliff
 iptsd
 libinput-gestures-git
 linux-surface
@@ -8,4 +9,5 @@ linux-surface-headers
 ministream
 omarchy-hyprland-titlebars
 signed
+stremio-web-desktop-bin
 surface-ipts-firmware

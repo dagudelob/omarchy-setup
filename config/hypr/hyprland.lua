@@ -31,3 +31,5 @@ hl.env("PATH", home .. "/.local/bin:" .. (os.getenv("PATH") or "/usr/share/omarc
 
 -- Add any other personal Hyprland configuration below.
 -- o.window("qemu", { workspace = "5" })
+pcall(require, "hypr.surface-pen")
+

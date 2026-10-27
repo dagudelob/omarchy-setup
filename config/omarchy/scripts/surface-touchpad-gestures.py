@@ -5,7 +5,8 @@ Surface Pro Ultra-Low-Latency Precision Touchpad Continuous Gestures for Omarchy
 - 4-finger vertical swipe: Instant, 1:1 proportional volume slider with zero drift & zero runaway.
 - Decoupled asynchronous OSD worker for fluid visual feedback without audio lag.
 - 4-finger horizontal swipe: Next track (swipe right) / Previous track (swipe left).
-- 4-finger tap: Play / Pause (Resume) audio toggle.
+- 4-finger tap: Pause / Resume audio & video playback toggle.
+(3-finger tap is handled natively by libinput as BTN_MIDDLE for 0ms middle click)
 """
 
 import os
@@ -17,6 +18,20 @@ import shlex
 import subprocess
 import threading
 import glob
+import fcntl
+import struct
+
+def find_touchpad():
+    for p in sorted(glob.glob("/dev/input/event*")):
+        try:
+            with open(p, "rb") as fd:
+                buf = bytearray(128)
+                fcntl.ioctl(fd.fileno(), 0x80004521 + (128 << 16), buf)
+                if (buf[335 // 8] >> (335 % 8)) & 1:
+                    return p
+        except Exception:
+            pass
+    return None
 
 def ensure_environment():
     if "OMARCHY_PATH" not in os.environ:
@@ -128,6 +143,114 @@ class VolumeWorker(threading.Thread):
             # Rate limiter between audio volume updates (60+ FPS responsiveness)
             time.sleep(0.015)
 
+class QuadtapWatcher(threading.Thread):
+    def __init__(self, controller):
+        super().__init__(daemon=True)
+        self.controller = controller
+        self.running = True
+        self.last_tap_time = 0.0
+
+    def trigger_play_pause(self):
+        resolve_wayland_display()
+        # 1. Direct MPRIS DBus call via busctl (instant ~5ms, identical to headphone click)
+        try:
+            cmd = "busctl --user list --acquired 2>/dev/null | grep 'org.mpris.MediaPlayer2.' | awk '{print $1}'"
+            services = subprocess.check_output(cmd, shell=True, text=True).strip().split()
+            if services:
+                for svc in services:
+                    subprocess.run(
+                        ["busctl", "--user", "call", svc, "/org/mpris/MediaPlayer2", "org.mpris.MediaPlayer2.Player", "PlayPause"],
+                        stderr=subprocess.DEVNULL
+                    )
+                subprocess.run(["omarchy-shell", "-q", "media", "status"], stderr=subprocess.DEVNULL)
+                return
+        except Exception:
+            pass
+
+        # 2. Fallback to omarchy-shell media playPause
+        subprocess.run(["omarchy-shell", "media", "playPause"], stderr=subprocess.DEVNULL)
+
+    def run(self):
+        EVENT_FORMAT = "llHHi"
+        EVENT_SIZE = struct.calcsize(EVENT_FORMAT)
+
+        while self.running:
+            dev_path = find_touchpad()
+            if not dev_path:
+                time.sleep(2)
+                continue
+
+            try:
+                with open(dev_path, "rb") as fd:
+                    # 4-finger state
+                    quad_active = False
+                    quad_start = 0.0
+
+                    # Centroid & movement tracking
+                    start_x = None
+                    start_y = None
+                    curr_x = None
+                    curr_y = None
+                    max_dist = 0.0
+
+                    while self.running:
+                        data = fd.read(EVENT_SIZE)
+                        if not data or len(data) < EVENT_SIZE:
+                            break
+                        _, _, ev_type, ev_code, ev_value = struct.unpack(EVENT_FORMAT, data)
+
+                        # EV_ABS = 3 (Only track ABS_X=0 and ABS_Y=1)
+                        if ev_type == 3:
+                            if ev_code == 0:  # ABS_X
+                                curr_x = ev_value
+                                if quad_active:
+                                    if start_x is None:
+                                        start_x = curr_x
+                                    dx = curr_x - start_x
+                                    dy = (curr_y - start_y) if (curr_y is not None and start_y is not None) else 0.0
+                                    dist = math.hypot(dx, dy)
+                                    if dist > max_dist:
+                                        max_dist = dist
+                            elif ev_code == 1:  # ABS_Y
+                                curr_y = ev_value
+                                if quad_active:
+                                    if start_y is None:
+                                        start_y = curr_y
+                                    dy = curr_y - start_y
+                                    dx = (curr_x - start_x) if (curr_x is not None and start_x is not None) else 0.0
+                                    dist = math.hypot(dx, dy)
+                                    if dist > max_dist:
+                                        max_dist = dist
+
+                        # EV_KEY = 1
+                        elif ev_type == 1:
+                            now = time.time()
+
+                            # BTN_TOOL_QUADTAP = 335 (4 fingers -> Pause/Resume)
+                            if ev_code == 335:
+                                if ev_value == 1:
+                                    quad_active = True
+                                    quad_start = now
+                                    start_x = curr_x
+                                    start_y = curr_y
+                                    max_dist = 0.0
+                                elif ev_value == 0:
+                                    if quad_active:
+                                        quad_active = False
+                                        duration = now - quad_start
+                                        with self.controller.lock:
+                                            is_swiping = (self.controller.mode is not None or self.controller.action_triggered)
+                                        if (now - self.last_tap_time) > 0.25 and 0.03 <= duration <= 0.50 and max_dist < 220.0 and not is_swiping:
+                                            self.last_tap_time = now
+                                            print(f"[gestures] 4-finger tap detected ({int(duration*1000)}ms, dist={int(max_dist)}px) -> Play/Pause", flush=True)
+                                            threading.Thread(target=self.trigger_play_pause, daemon=True).start()
+
+                            # BTN_TOUCH = 330: safety cleanup when all fingers leave
+                            elif ev_code == 330 and ev_value == 0:
+                                quad_active = False
+            except Exception:
+                time.sleep(1)
+
 class SurfaceGestureController:
     def __init__(self):
         self.lock = threading.Lock()
@@ -135,6 +258,8 @@ class SurfaceGestureController:
         self.osd_worker.start()
         self.worker = VolumeWorker(self.osd_worker)
         self.worker.start()
+        self.quadtap_watcher = QuadtapWatcher(self)
+        self.quadtap_watcher.start()
 
         self.current_vol = read_sink_volume()
         self.active_fingers = 0
@@ -225,13 +350,16 @@ class SurfaceGestureController:
                 final_vol = int(round(self.current_vol))
                 self.osd_worker.update(final_vol)
 
-            # Detect 4-finger Tap: very brief touch with almost zero movement
+            # Fallback 4-finger Tap detection from libinput swipe end
             elif mode is None and not was_triggered and dist < 6.0 and duration < 0.30:
-                resolve_wayland_display()
-                threading.Thread(
-                    target=lambda: subprocess.run(["omarchy-shell", "media", "playPause"], stderr=subprocess.DEVNULL),
-                    daemon=True
-                ).start()
+                now = time.time()
+                if (now - self.quadtap_watcher.last_tap_time) > 0.35:
+                    self.quadtap_watcher.last_tap_time = now
+                    resolve_wayland_display()
+                    threading.Thread(
+                        target=lambda: subprocess.run(["omarchy-shell", "media", "playPause"], stderr=subprocess.DEVNULL),
+                        daemon=True
+                    ).start()
 
 def main():
     ensure_environment()

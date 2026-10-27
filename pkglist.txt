@@ -24,10 +24,10 @@ cups-pk-helper
 ddcutil
 docker
 docker-buildx
-docker-compose
 dosfstools
 dotnet-runtime
 efibootmgr
+electron33-bin
 evince
 ex-vi-compat
 exfatprogs
@@ -84,6 +84,7 @@ kdenlive
 kernel-modules-hook
 lazygit
 less
+lib32-vulkan-intel
 libcamera
 libcamera-ipa
 libcamera-tools
@@ -130,6 +131,7 @@ omarchy-nvim
 omarchy-settings
 omasnap
 omawrite
+openai-codex-desktop
 owe
 owe-lockfeed
 pacman-contrib
@@ -158,11 +160,13 @@ rclone
 ripgrep
 ruby
 sddm
+seahorse
 signed
 slurp
 snapshot
 socat
 starship
+stremio-web-desktop-bin
 sudo
 superwhisper-bin
 surface-ipts-firmware

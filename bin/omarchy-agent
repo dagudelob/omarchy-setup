@@ -1,0 +1,59 @@
+#!/bin/bash
+
+# Custom wrapper for omarchy-agent to support 'agy' / 'antigravity'
+inline=false
+pick=false
+prompt=""
+
+while (($#)); do
+  case "$1" in
+    --inline)
+      inline=true
+      shift
+      ;;
+    --pick)
+      pick=true
+      shift
+      ;;
+    --prompt)
+      prompt=${2:?--prompt needs a value}
+      shift 2
+      ;;
+    *)
+      # Pass through or handle unrecognized
+      break
+      ;;
+  esac
+done
+
+agent=$(omarchy-default-agent)
+
+if [[ -z $agent ]]; then
+  if [[ $pick == "true" ]]; then
+    exec omarchy-menu summon setup.default.agent
+  fi
+  echo "Choose default agent with: omarchy default agent <name>" >&2
+  exit 1
+fi
+
+if [[ "$agent" == "agy" || "$agent" == "antigravity" || "$agent" == "codex" ]]; then
+  [[ $PWD == "$HOME" && -d $HOME/Work ]] && cd "$HOME/Work"
+  
+  command=(agy)
+  if [[ -n ${prompt} ]]; then
+    command+=(--prompt-interactive "$prompt")
+  fi
+
+  if [[ $inline == "true" ]]; then
+    exec "${command[@]}"
+  else
+    exec omarchy-launch-tui --app-id=org.omarchy.agent "${command[@]}"
+  fi
+fi
+
+# Fallback to upstream /usr/bin/omarchy-agent for all other agents
+original_args=()
+[[ $inline == "true" ]] && original_args+=(--inline)
+[[ $pick == "true" ]] && original_args+=(--pick)
+[[ -n $prompt ]] && original_args+=(--prompt "$prompt")
+exec /usr/bin/omarchy-agent "${original_args[@]}" "$@"

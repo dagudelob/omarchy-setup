@@ -5,9 +5,9 @@
 -- See https://wiki.hypr.land/Configuring/Basics/Variables/#input
 hl.config({
   input = {
-    -- Distribución US Internacional estándar (con dead keys: ~ + n = ñ, ' + a = á)
+    -- Distribución US Internacional personalizada (comillas dobles vivas, tildes y eñes muertas)
     kb_layout = "us",
-    kb_variant = "intl",
+    kb_variant = "intl-livequote",
     -- kb_options sin compose:caps para mantener Caps Lock estándar
     kb_options = "",
 
@@ -27,8 +27,9 @@ hl.config({
       -- Enable the touchpad while typing.
       disable_while_typing = true,
 
-      -- Left-click-and-drag with three fingers.
-      drag_3fg = 1,
+      -- 3-finger tap for middle click (drag_3fg = 0 to allow native middle click)
+      drag_3fg = 0,
+      tap_button_map = "lrm",
     },
   },
 })
@@ -36,7 +37,6 @@ hl.config({
 -- Enable touchpad gestures for changing workspaces.
 -- See https://wiki.hypr.land/Configuring/Advanced-and-Cool/Gestures/
 hl.gesture({ fingers = 3, direction = "horizontal", action = "workspace" })
-hl.gesture({ fingers = 4, direction = "horizontal", action = "workspace" })
 
 
 -- Enable touchpad gestures for moving focus (helpful on scrolling layout).
