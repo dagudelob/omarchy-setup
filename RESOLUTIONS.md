@@ -44,3 +44,4 @@ Organized registry of resolved issues and implemented features, with their corre
 | 2026-10-28 | `fix` | Limine Boot Menu: Restore Windows 11 Dual Boot and System Recovery Tools Dropdown | [fix/limine-boot-windows-and-recovery-menu](https://github.com/dagudelob/omarchy-setup/tree/fix/limine-boot-windows-and-recovery-menu) |
 | 2026-10-28 | `fix` | Google Chrome Window Size PiP Rule Diagnosis | [fix/chrome-window-size-pip-fullscreen](https://github.com/dagudelob/omarchy-setup/tree/fix/chrome-window-size-pip-fullscreen) |
 | 2026-10-28 | `fix` | Calibración de presión y eliminación de latencia en touchscreen de Surface Pro | [fix/surface-touch-pressure-lag](https://github.com/dagudelob/omarchy-setup/tree/fix/surface-touch-pressure-lag) |
+| 2026-10-28 | `fix` | Fix Intel IPU3 Cameras in Google Meet and Brave on Microsoft Surface | [fix/surface-camera-google-meet-ipu3](https://github.com/dagudelob/omarchy-setup/tree/fix/surface-camera-google-meet-ipu3) |
