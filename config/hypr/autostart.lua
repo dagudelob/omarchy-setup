@@ -6,6 +6,7 @@
 
 hl.on("hyprland.start", function()
   -- Autostart commands
+  o.launch_on_start("hyprsunset")
 end)
 
 

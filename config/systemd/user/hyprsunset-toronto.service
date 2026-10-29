@@ -1,0 +1,10 @@
+[Unit]
+Description=Update hyprsunset solar schedule for Toronto
+After=default.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/update-hyprsunset-toronto
+
+[Install]
+WantedBy=default.target
