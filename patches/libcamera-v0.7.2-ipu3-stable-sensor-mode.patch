@@ -1,0 +1,40 @@
+diff --git i/src/libcamera/pipeline/ipu3/imgu.cpp w/src/libcamera/pipeline/ipu3/imgu.cpp
+index bb36c06..1fcc711 100644
+--- i/src/libcamera/pipeline/ipu3/imgu.cpp
++++ w/src/libcamera/pipeline/ipu3/imgu.cpp
+@@ -108,7 +108,8 @@ bool isSameRatio(const Size &in, const Size &out)
+ void calculateBDSHeight(ImgUDevice::Pipe *pipe, const Size &iif, const Size &gdc,
+ 			unsigned int bdsWidth, float bdsSF)
+ {
+-	unsigned int minIFHeight = iif.height - ImgUDevice::kIFMaxCropHeight;
++	unsigned int minIFHeight = iif.height > ImgUDevice::kIFMaxCropHeight
++				 ? iif.height - ImgUDevice::kIFMaxCropHeight : 0;
+ 	unsigned int minBDSHeight = gdc.height + ImgUDevice::kFilterHeight * 2;
+ 	unsigned int ifHeight;
+ 	float bdsHeight;
+diff --git i/src/libcamera/pipeline/ipu3/ipu3.cpp w/src/libcamera/pipeline/ipu3/ipu3.cpp
+index 0f3e169..57c78a4 100644
+--- i/src/libcamera/pipeline/ipu3/ipu3.cpp
++++ w/src/libcamera/pipeline/ipu3/ipu3.cpp
+@@ -258,11 +258,7 @@ CameraConfiguration::Status IPU3CameraConfiguration::validate()
+ 	 * https://bugs.libcamera.org/show_bug.cgi?id=32
+ 	 */
+ 	if (rawSize.isNull())
+-		rawSize = rawRequirement.expandedTo({ ImgUDevice::kIFMaxCropWidth,
+-						      ImgUDevice::kIFMaxCropHeight })
+-				  .grownBy({ ImgUDevice::kOutputMarginWidth,
+-					     ImgUDevice::kOutputMarginHeight })
+-				  .boundedTo(data_->cio2_.sensor()->resolution());
++		rawSize = data_->cio2_.sensor()->resolution();
+ 
+ 	cio2Configuration_ = data_->cio2_.generateConfiguration(rawSize);
+ 	if (!cio2Configuration_.pixelFormat.isValid())
+@@ -452,7 +448,7 @@ PipelineHandlerIPU3::generateConfiguration(Camera *camera, Span<const StreamRole
+ 							      ImgUDevice::kOutputAlignHeight);
+ 			pixelFormat = formats::NV12;
+ 			bufferCount = IPU3CameraConfiguration::kBufferCount;
+-			streamFormats[pixelFormat] = { { ImgUDevice::kOutputMinSize, size } };
++			streamFormats[pixelFormat] = { { size, size } };
+ 
+ 			break;
+ 		}
