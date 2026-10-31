@@ -46,3 +46,4 @@ Organized registry of resolved issues and implemented features, with their corre
 | 2026-10-28 | `fix` | Calibración de presión y eliminación de latencia en touchscreen de Surface Pro | [fix/surface-touch-pressure-lag](https://github.com/dagudelob/omarchy-setup/tree/fix/surface-touch-pressure-lag) |
 | 2026-10-28 | `fix` | Fix Intel IPU3 Cameras in Google Meet and Brave on Microsoft Surface | [fix/surface-camera-google-meet-ipu3](https://github.com/dagudelob/omarchy-setup/tree/fix/surface-camera-google-meet-ipu3) |
 | 2026-10-28 | `feature` | Sincronización solar del modo nocturno con el amanecer y atardecer de Toronto | [feature/toronto-nightlight-solar-sync](https://github.com/dagudelob/omarchy-setup/tree/feature/toronto-nightlight-solar-sync) |
+| 2026-10-31 | `fix` | Fix AnyDesk UI scaling and fullscreen on Wayland | [fix/anydesk-fullscreen](https://github.com/dagudelob/omarchy-setup/tree/fix/anydesk-fullscreen) |
