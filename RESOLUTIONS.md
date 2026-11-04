@@ -47,3 +47,4 @@ Organized registry of resolved issues and implemented features, with their corre
 | 2026-10-28 | `fix` | Fix Intel IPU3 Cameras in Google Meet and Brave on Microsoft Surface | [fix/surface-camera-google-meet-ipu3](https://github.com/dagudelob/omarchy-setup/tree/fix/surface-camera-google-meet-ipu3) |
 | 2026-10-28 | `feature` | Sincronización solar del modo nocturno con el amanecer y atardecer de Toronto | [feature/toronto-nightlight-solar-sync](https://github.com/dagudelob/omarchy-setup/tree/feature/toronto-nightlight-solar-sync) |
 | 2026-10-31 | `fix` | Fix AnyDesk UI scaling and fullscreen on Wayland | [fix/anydesk-fullscreen](https://github.com/dagudelob/omarchy-setup/tree/fix/anydesk-fullscreen) |
+| 2026-11-04 | `feature` | Aumentar sensibilidad del touchpad en Hyprland | [feature/increase-touchpad-sensitivity](https://github.com/dagudelob/omarchy-setup/tree/feature/increase-touchpad-sensitivity) |
