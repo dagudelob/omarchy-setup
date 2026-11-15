@@ -49,3 +49,4 @@ Organized registry of resolved issues and implemented features, with their corre
 | 2026-10-31 | `fix` | Fix AnyDesk UI scaling and fullscreen on Wayland | [fix/anydesk-fullscreen](https://github.com/dagudelob/omarchy-setup/tree/fix/anydesk-fullscreen) |
 | 2026-11-04 | `feature` | Aumentar sensibilidad del touchpad en Hyprland | [feature/increase-touchpad-sensitivity](https://github.com/dagudelob/omarchy-setup/tree/feature/increase-touchpad-sensitivity) |
 | 2026-11-04 | `fix` | Fix Bluetooth AirPods Disconnect After Pairing | [fix/bluetooth-airpods-disconnect](https://github.com/dagudelob/omarchy-setup/tree/fix/bluetooth-airpods-disconnect) |
+| 2026-11-15 | `fix` | Update Antigravity desktop app via AUR for automatic Omarchy updates | [fix/antigravity-app-auto-update-aur](https://github.com/dagudelob/omarchy-setup/tree/fix/antigravity-app-auto-update-aur) |
