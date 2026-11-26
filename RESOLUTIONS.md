@@ -51,3 +51,4 @@ Organized registry of resolved issues and implemented features, with their corre
 | 2026-11-04 | `fix` | Fix Bluetooth AirPods Disconnect After Pairing | [fix/bluetooth-airpods-disconnect](https://github.com/dagudelob/omarchy-setup/tree/fix/bluetooth-airpods-disconnect) |
 | 2026-11-15 | `fix` | Update Antigravity desktop app via AUR for automatic Omarchy updates | [fix/antigravity-app-auto-update-aur](https://github.com/dagudelob/omarchy-setup/tree/fix/antigravity-app-auto-update-aur) |
 | 2026-11-26 | `feature` | Install Granola via AUR with automatic omarchy update integration | [feature/install-granola-omarchy-update](https://github.com/dagudelob/omarchy-setup/tree/feature/install-granola-omarchy-update) |
+| 2026-11-26 | `feature` | Install Linear as Omarchy Web App | [feature/linear-webapp](https://github.com/dagudelob/omarchy-setup/tree/feature/linear-webapp) |
