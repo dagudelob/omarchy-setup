@@ -1,0 +1,8 @@
+[Unit]
+Description=Weekly backup of Antigravity conversations to Google Drive
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/home/dagudelo/Code/omarchy-setup/scripts/backup-antigravity-conversations.sh backup --cloud --keep 4
