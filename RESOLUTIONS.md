@@ -53,3 +53,4 @@ Organized registry of resolved issues and implemented features, with their corre
 | 2026-11-26 | `feature` | Install Granola via AUR with automatic omarchy update integration | [feature/install-granola-omarchy-update](https://github.com/dagudelob/omarchy-setup/tree/feature/install-granola-omarchy-update) |
 | 2026-11-26 | `feature` | Install Linear as Omarchy Web App | [feature/linear-webapp](https://github.com/dagudelob/omarchy-setup/tree/feature/linear-webapp) |
 | 2026-11-26 | `fix` | Reinstall antigravity-ide 2.8.0-1 and verify omarchy update integration | [fix/reinstall-antigravity-ide-omarchy-update](https://github.com/dagudelob/omarchy-setup/tree/fix/reinstall-antigravity-ide-omarchy-update) |
+| 2026-11-26 | `fix` | AnyDesk Remote Display Scaling and Fullscreen | [fix/anydesk-fullscreen-display](https://github.com/dagudelob/omarchy-setup/tree/fix/anydesk-fullscreen-display) |
