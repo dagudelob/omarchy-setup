@@ -18,6 +18,12 @@
 -- Cambiar distribución de teclado (alternativa rápida con tecla Super)
 o.bind("SUPER + ALT + K", "Switch keyboard layout", "hyprctl switchxkblayout all next")
 
+-- Cerrar ventana con Alt + F4
+o.bind("ALT + F4", "Close window", hl.dsp.window.close())
+
+-- Abrir Files (administrador de archivos) con Super + E
+o.bind("SUPER + E", "Files", { launch = "nautilus" })
+
 -- Change an existing binding. o.rebind takes the same arguments as o.bind.
 -- This example replaces the default file manager with Flea.
 -- o.rebind("SUPER + SHIFT + F", "File manager", { launch = "flea" })
@@ -29,3 +35,12 @@ o.bind("SUPER + ALT + K", "Switch keyboard layout", "hyprctl switchxkblayout all
 -- o.bind("SUPER + SHIFT + S", nil, "omarchy-capture-screenshot")
 -- o.bind("SUPER + H", nil, "voxtype record toggle")
 -- o.bind("SUPER + PERIOD", nil, { panel = "omarchy.emojis" })
+
+-- Dictation keys: only allow AltGr + Space (MOD5 + SPACE) for push-to-talk
+-- since us(intl-livequote) maps Right Alt to ISO_Level3_Shift (AltGr).
+-- Unbind Omarchy's default Alt + Space (Left Alt) and Right Alt (Alt_R).
+if o.dictation_installed and o.dictation_installed() then
+  hl.unbind("ALT + SPACE")
+  hl.unbind("ALT + Alt_R")
+  o.bind_hold("MOD5 + SPACE", "Start dictation (push-to-talk)", "omarchy-dictation start", "Stop dictation (push-to-talk)", "omarchy-dictation stop")
+end
